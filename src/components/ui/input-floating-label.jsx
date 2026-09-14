@@ -1,4 +1,11 @@
-export default function InputFloatingLabel({ id, type, text }) {
+export default function InputFloatingLabel({
+  id,
+  type,
+  text,
+  value,
+  onChange,
+  ...props
+}) {
   return (
     <div className="relative w-full">
       <input
@@ -6,6 +13,9 @@ export default function InputFloatingLabel({ id, type, text }) {
         id={id}
         type={type}
         placeholder=""
+        value={value}
+        onChange={onChange}
+        {...props}
       />
       <label
         htmlFor={id}
