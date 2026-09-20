@@ -1,0 +1,41 @@
+name: 🐛 Bug
+description: Relate um problema na aplicação.
+title: "fix(): "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Preencha os campos abaixo para conseguir reproduzir e corrigir o bug.
+        
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Problema
+      description: Descreva de forma clara o que está acontecendo de errado.
+      placeholder: "Ex: Ao clicar no botão de salvar perfil, a tela congela e exibe um erro 500 no console."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Passo a Passo
+      description: Descreva o que deve ser feito para o erro acontecer.
+      placeholder: |
+        1. Acesse a página '...'
+        2. Clique no botão '...'
+        3. Preencha o campo '...' com '...'
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: Comportamento Esperado vs Atual
+      description: Descreva o que deveria ter acontecido e o que realmente aconteceu.
+      value: |
+        - **Esperado:** 
+        - **Atual:** 
+    validations:
+      required: false
