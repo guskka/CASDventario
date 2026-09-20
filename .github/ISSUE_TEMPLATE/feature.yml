@@ -1,0 +1,21 @@
+name: ✨ Feature
+description: Sugira uma nova funcionalidade.
+title: "feat(): "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Preencha os campos abaixo para entender a nova funcionalidade.
+        
+  - type: textarea
+    id: user-story
+    attributes:
+      label: Contexto
+      description: Descreva o objetivo da tarefa.
+      value: |
+        > **Como** [tipo de usuário],
+        > **quero** [ação que deseja realizar],
+        > **para** [benefício ou objetivo final].
+    validations:
+      required: true
