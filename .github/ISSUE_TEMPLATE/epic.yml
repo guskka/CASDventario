@@ -1,0 +1,40 @@
+name: "📌 [Epic / Macro Issue]"
+description: "Cria uma tarefa geral (macro) para ser refinada com o time."
+title: "[Epic] "
+
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: "🎯 Objetivo Geral"
+      description: "Descreva brevemente o que é esta funcionalidade."
+      placeholder: "Ex: Permitir que administradores possam gerenciar alunos..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: frontend-scope
+    attributes:
+      label: "🎨 Escopo Frontend"
+      description: "Será preenchido na reunião de refinamento com o(s) desenvolvedor(es) frontend."
+      placeholder: "Telas, componentes, modais..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: backend-scope
+    attributes:
+      label: "⚙️ Escopo Backend"
+      description: "Será preenchido na reunião de refinamento com o(s) desenvolvedor(es) backend."
+      placeholder: "Rotas, Controllers, Banco de dados..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: micro-issues
+    attributes:
+      label: "📋 Checklist de Micro-Issues"
+      description: "Será preenchido na reunião de refinamento após as definições dos escopos."
+      placeholder: "- [ ] feat(backend): criar tabela alunos..."
+    validations:
+      required: false
