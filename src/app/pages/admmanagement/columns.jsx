@@ -4,6 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { DataTable } from './data-table';
 import { Button } from '@/components/ui/button';
 import { ArrowsDownUpIcon } from '@phosphor-icons/react';
+import EditAdminDialog from './components/edit-admin-dialog';
 
 const columnHelper = createColumnHelper();
 
@@ -42,8 +43,18 @@ export const columns = columnHelper.columns([
       );
     },
   }),
-  columnHelper.accessor('company.name', {
-    header: 'Empresa',
+  columnHelper.display({
+    id: 'actions',
+    meta: {
+      className: 'w-15',
+    },
+    cell: () => {
+      return (
+        <div>
+          <EditAdminDialog />
+        </div>
+      );
+    },
   }),
 ]);
 
