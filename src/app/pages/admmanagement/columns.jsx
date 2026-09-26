@@ -29,6 +29,15 @@ export const columns = columnHelper.columns([
       );
     },
   }),
+  columnHelper.accessor('username', {
+    header: 'Apelido',
+  }),
+  columnHelper.accessor('status', {
+    header: 'Status',
+  }),
+  columnHelper.accessor('role', {
+    header: 'Tipo',
+  }),
   columnHelper.accessor('email', {
     header: ({ column }) => {
       return (
