@@ -17,7 +17,7 @@ export const columns = columnHelper.columns([
   }),
   columnHelper.accessor('name', {
     header: 'Nome',
-    cell: ({ row, getValue }) => {
+    cell: ({ getValue }) => {
       const name = getValue();
       const avatarUrl = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(name)}`;
 
