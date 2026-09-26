@@ -112,12 +112,6 @@ export default function EditAdminDialog() {
                 </SelectContent>
               </Select>
             </Field>
-            <Field>
-              <Label htmlFor="email" className="opacity-50">
-                Email
-              </Label>
-              <Input disabled id="email" />
-            </Field>
           </FieldGroup>
           <DialogFooter>
             <Button type="submit" variant="default">
