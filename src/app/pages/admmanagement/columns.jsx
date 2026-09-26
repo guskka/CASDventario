@@ -12,7 +12,7 @@ export const columns = columnHelper.columns([
   columnHelper.accessor('id', {
     header: 'ID',
     meta: {
-      className: 'w-20',
+      className: 'w-15',
     },
   }),
   columnHelper.accessor('name', {
