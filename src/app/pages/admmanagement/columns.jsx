@@ -57,10 +57,10 @@ export const columns = columnHelper.columns([
     meta: {
       className: 'w-15',
     },
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div>
-          <EditAdminDialog />
+          <EditAdminDialog user={row.original}/>
         </div>
       );
     },

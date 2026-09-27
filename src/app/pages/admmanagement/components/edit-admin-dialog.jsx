@@ -23,32 +23,31 @@ import {
 } from '@/components/ui/select';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 
-export default function EditAdminDialog() {
-  // REMOVER ISTO AQUI DEPOIS NA HORA DE FAZER COM A API
-  // APENAS PARA MOCK
-  const [cargo, setCargo] = useState('');
-  const [status, setStatus] = useState('');
+export default function EditAdminDialog({ user }) {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [name, setName] = useState(user.name);
+  const [username, setUsername] = useState(user.username);
+  const [status, setStatus] = useState(user.status);
+  const [role, setRole] = useState(user.role);
 
   const ADM_ROLES = [
-    { label: 'Administrador Básico', value: 'normalAdm' },
-    { label: 'Administrador Mestre', value: 'masterAdm' },
+    { label: 'Administrador Básico', value: 'BASICO' },
+    { label: 'Administrador Mestre', value: 'MESTRE' },
   ];
   const ADM_STATUS = [
-    {
-      label: 'Ativo',
-      value: 'active',
-    },
-    {
-      label: 'Inativo',
-      value: 'inactive',
-    },
+    { label: 'Ativo', value: 'ATIVO' },
+    { label: 'Inativo', value: 'INATIVO' },
   ];
-  // REMOVER ATE AQUI
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setOpenDialog(false);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={(open) => setOpenDialog(open)}>
       <DialogTrigger>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" onClick={() => setOpenDialog(true)}>
           <PencilSimpleIcon />
         </Button>
       </DialogTrigger>
@@ -56,25 +55,29 @@ export default function EditAdminDialog() {
         <DialogHeader>
           <DialogTitle>Editar Usuário</DialogTitle>
         </DialogHeader>
-        <form>
+        <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
               <Label htmlFor="name">Nome</Label>
-              <Input required id="name" />
+              <Input
+                required
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </Field>
             <Field>
               <Label htmlFor="username">Apelido</Label>
-              <Input required id="username" />
+              <Input
+                required
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </Field>
             <Field>
               <Label htmlFor="status">Status</Label>
-              <Select
-                required
-                id="status"
-                items={ADM_STATUS}
-                value={status}
-                onValueChange={setStatus}
-              >
+              <Select required id="status" items={ADM_STATUS}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um status" />
                 </SelectTrigger>
@@ -91,13 +94,7 @@ export default function EditAdminDialog() {
             </Field>
             <Field>
               <Label htmlFor="role">Tipo</Label>
-              <Select
-                required
-                id="role"
-                items={ADM_ROLES}
-                value={cargo}
-                onValueChange={setCargo}
-              >
+              <Select required id="role" items={ADM_ROLES}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um cargo" />
                 </SelectTrigger>
