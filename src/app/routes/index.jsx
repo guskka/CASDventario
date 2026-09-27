@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { AppProtectedRoutes } from './protected';
-import SignIn from '../pages/sign-in';
-import SignUp from '../pages/sign-up';
-import ForgotPassword from '../pages/forgotpassword';
-import AdmUserManagement from '../pages/admmanagement';
+import SignIn from '../pages/auth/sign-in';
+import SignUp from '../pages/auth/sign-up';
+import ForgotPassword from '../pages/auth/forgotpassword';
+import AdmUserManagement from '../pages/app/user-management';
 
 export function AppRoutes() {
   return (

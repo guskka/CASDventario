@@ -1,9 +1,9 @@
-import LogoWhite from '../../../assets/brand/casdventario-white-logo.svg';
-import LogotypeBlack from '../../../assets/brand/casdventario-black-logotype.svg';
-import LogotypeWhite from '../../../assets/brand/casdventario-white-logotype.svg';
+import LogoWhite from '../../../../assets/brand/casdventario-white-logo.svg';
+import LogotypeBlack from '../../../../assets/brand/casdventario-black-logotype.svg';
+import LogotypeWhite from '../../../../assets/brand/casdventario-white-logotype.svg';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
-import InputFloatingLabel from '../../../components/ui/input-floating-label';
+import InputFloatingLabel from '../../../../components/ui/input-floating-label';
 import { Button } from '@/components/ui/button';
 
 export default function ForgotPassword() {
