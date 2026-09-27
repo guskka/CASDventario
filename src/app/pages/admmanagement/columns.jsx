@@ -19,7 +19,7 @@ export const columns = columnHelper.columns([
     header: 'Nome',
     cell: ({ getValue }) => {
       const name = getValue();
-      const avatarUrl = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(name)}`;
+      const avatarUrl = `https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(name)}`;
 
       return (
         <div className="flex items-center gap-2">
