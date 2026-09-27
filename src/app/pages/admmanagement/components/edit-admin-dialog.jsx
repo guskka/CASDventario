@@ -21,6 +21,7 @@ import {
   SelectItem,
   SelectGroup,
 } from '@/components/ui/select';
+import { toast } from '@/components/ui/toast';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 
 export default function EditAdminDialog({ user }) {
@@ -111,7 +112,16 @@ export default function EditAdminDialog({ user }) {
             </Field>
           </FieldGroup>
           <DialogFooter>
-            <Button type="submit" variant="default">
+            <Button
+              type="submit"
+              variant="default"
+              onClick={() =>
+                toast.add({
+                  type: 'success',
+                  description: 'Administrador editado com sucesso.',
+                })
+              }
+            >
               Editar
             </Button>
             <DialogClose>
