@@ -202,7 +202,6 @@ function ToastList() {
           <ToastDescription />
         </div>
         <ToastAction />
-        <ToastClose />
       </ToastContent>
     </Toast>
   ));
