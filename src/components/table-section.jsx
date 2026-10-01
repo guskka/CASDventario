@@ -8,7 +8,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 
-import UsersDataTable from '../app/pages/admmanagement/columns';
+import UsersDataTable from '../app/pages/app/user-management/columns';
 
 async function fetchUsers() {
   const response = await fetch('http://127.0.0.1:3333/usuarios');

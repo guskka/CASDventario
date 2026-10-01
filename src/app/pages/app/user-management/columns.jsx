@@ -1,20 +1,27 @@
 'use client';
 
 import { createColumnHelper } from '@tanstack/react-table';
+
 import { DataTable } from './data-table';
+
 import { Button } from '@/components/ui/button';
+
 import { ArrowsDownUpIcon } from '@phosphor-icons/react';
+
+import EditAdminDialog from './components/edit-admin-dialog';
 
 const columnHelper = createColumnHelper();
 
 export const columns = columnHelper.columns([
   columnHelper.accessor('id_usuario', {
     header: 'ID',
+
     meta: { className: 'w-20' },
   }),
 
   columnHelper.accessor('nome_completo', {
     header: 'Nome',
+
     cell: ({ getValue }) => {
       const name = getValue();
 
@@ -29,10 +36,23 @@ export const columns = columnHelper.columns([
             src={avatarUrl}
             alt={`Avatar de ${name}`}
           />
+
           <p>{name}</p>
         </div>
       );
     },
+  }),
+
+  columnHelper.accessor('username', {
+    header: 'Apelido',
+  }),
+
+  columnHelper.accessor('status', {
+    header: 'Status',
+  }),
+
+  columnHelper.accessor('role', {
+    header: 'Tipo',
   }),
 
   columnHelper.accessor('email', {
@@ -48,6 +68,22 @@ export const columns = columnHelper.columns([
           Email
           <ArrowsDownUpIcon />
         </Button>
+      );
+    },
+  }),
+
+  columnHelper.display({
+    id: 'actions',
+
+    meta: {
+      className: 'w-15',
+    },
+
+    cell: ({ row }) => {
+      return (
+        <div>
+          <EditAdminDialog user={row.original} />
+        </div>
       );
     },
   }),

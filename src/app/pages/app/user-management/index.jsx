@@ -1,4 +1,4 @@
-import Header from '../../../components/ui/header';
+import Header from '../../../../components/ui/header';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import AddAdminDialog from './components/add-admin-dialog';
