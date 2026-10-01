@@ -47,11 +47,7 @@ export default function SignUp() {
         nome: `${primeiroNome} ${segundoNome}`.trim(),
         email,
         senha,
-        // A tela não tem um campo de "apelido" separado — por enquanto,
-        // uso o primeiro nome como valor padrão, já que a coluna no banco
-        // é obrigatória. Se quiserem um apelido de verdade, adicionem um
-        // InputFloatingLabel pra isso e troquem essa linha.
-        apelidos: primeiroNome,
+        apelido: primeiroNome,
       });
 
       setSucesso(true);

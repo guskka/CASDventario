@@ -32,11 +32,17 @@ export function login(email, senha) {
   });
 }
 
-export function cadastrarUsuario({ nome, email, senha, apelidos, estado, tipo }) {
+export function cadastrarUsuario({ nome, email, senha, apelido, status, tipo }) {
   return request("/usuarios", {
     method: "POST",
-    body: JSON.stringify({ nome, email, senha, apelidos, estado, tipo }),
+    body: JSON.stringify({ nome, email, senha, apelido, status, tipo }),
   });
+}
+
+// Lê o usuário salvo no login. Retorna null se não houver ninguém logado.
+export function usuarioLogado() {
+  const bruto = sessionStorage.getItem('usuario');
+  return bruto ? JSON.parse(bruto) : null;
 }
 
 // ============================================================
@@ -74,8 +80,8 @@ export function deletarAluno(rm) {
 //  NOTEBOOKS
 // ============================================================
 
-export function listarNotebooks(estado) {
-  const query = estado ? `?estado=${encodeURIComponent(estado)}` : "";
+export function listarNotebooks(status) {
+  const query = status ? `?status=${encodeURIComponent(status)}` : "";
   return request(`/notebooks${query}`);
 }
 
