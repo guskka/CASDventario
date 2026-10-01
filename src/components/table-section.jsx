@@ -7,7 +7,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import UsersDataTable from '../app/pages/admmanagement/columns';
+import UsersDataTable from '../app/pages/app/user-management/columns';
 
 // Cria uma função para consumir os dados da API
 async function fetchUsers() {

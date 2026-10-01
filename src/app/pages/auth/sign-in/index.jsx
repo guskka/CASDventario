@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoWhite from '../../../assets/brand/casdventario-white-logo.svg';
-import LogotypeBlack from '../../../assets/brand/casdventario-black-logotype.svg';
-import LogotypeWhite from '../../../assets/brand/casdventario-white-logotype.svg';
+import LogoWhite from '../../../../assets/brand/casdventario-white-logo.svg';
+import LogotypeBlack from '../../../../assets/brand/casdventario-black-logotype.svg';
+import LogotypeWhite from '../../../../assets/brand/casdventario-white-logotype.svg';
 import { Link } from 'react-router-dom';
-import InputFloatingLabel from '../../../components/ui/input-floating-label';
+import InputFloatingLabel from '../../../../components/ui/input-floating-label';
 import { Button } from '@/components/ui/button';
-import { useTheme } from '../../../components/theme-provider';
+import { useTheme } from '../../../../components/theme-provider';
 import { login } from '@/lib/api';
 
 export default function SignIn() {
