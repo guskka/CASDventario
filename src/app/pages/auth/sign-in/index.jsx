@@ -32,7 +32,7 @@ export default function SignIn() {
       // segura de verdade — serve só pra testar o fluxo por enquanto.
       sessionStorage.setItem('usuario', JSON.stringify(usuario));
 
-      navigate('/dashboard'); // troque pelo caminho real da tela principal, se for outro
+      navigate('/usermanagement'); // troque pelo caminho real da tela principal, se for outro
     } catch (err) {
       setErro(err.message);
     } finally {

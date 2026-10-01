@@ -34,8 +34,8 @@ export function DataTable({ columns, data, pageSize = 10, filterValue = '' }) {
   });
 
   React.useEffect(() => {
-    table.getColumn('name')?.setFilterValue(filterValue);
-  }, [filterValue, table]);
+  table.getColumn('nome_completo')?.setFilterValue(filterValue);
+}, [filterValue, table]);
 
   return (
     <div className='flex flex-col gap-4'>

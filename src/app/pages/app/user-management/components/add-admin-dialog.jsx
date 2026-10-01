@@ -67,9 +67,10 @@ export default function AddAdminDialog() {
         nome: `${nome} ${sobrenome}`.trim(),
         email,
         senha: senhaTemporaria,
-        apelidos: nome,
-        // O banco espera "padrao" ou "administrador" (tb_usuario_tipo_usuario).
-        tipo: cargo === 'masterAdm' ? 'administrador' : 'padrao',
+        apelido: nome,
+        // O banco espera "BASICO" ou "administrador" (tb_usuario_tipo_usuario).
+        // O banco aceita "BASICO" ou "MESTRE" (enum tb_usuario_tipo).
+        tipo: cargo === 'masterAdm' ? 'MESTRE' : 'BASICO',
       });
 
       // TCC: mostra a senha temporária pra quem cadastrou repassar pro novo
