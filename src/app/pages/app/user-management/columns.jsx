@@ -16,7 +16,7 @@ export const columns = columnHelper.columns([
   columnHelper.accessor('id_usuario', {
     header: 'ID',
 
-    meta: { className: 'w-20' },
+    meta: { className: 'w-15' },
   }),
 
   columnHelper.accessor('nome_completo', {
@@ -25,7 +25,7 @@ export const columns = columnHelper.columns([
     cell: ({ getValue }) => {
       const name = getValue();
 
-      const avatarUrl = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(
+      const avatarUrl = `https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(
         name
       )}`;
 
