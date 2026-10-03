@@ -1,22 +1,24 @@
 <div align="center">
-
-<h1>
-  <img src="src/assets/brand/casdventario-blue-logo.svg" alt="Logo CASDventario" width="48" align="absmiddle" />
-  CASDventario
-</h1>
-
-**Sistema web de gestão de estoque, kits e empréstimo de notebooks da ONG CASD**
-
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
-![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?logo=shadcnui&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-v24.14.1-339933?logo=nodedotjs&logoColor=white)
-![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
-
+  <img src="src/assets/brand/casdventario-blue-logotype.svg" alt="Logotipo CASDventário" width="336" />
 </div>
 
----
+<br>
+
+<hr>
+
+<h3 align="center">Sistema Web de Gestão de Inventário para ONG CASD</h3>
+
+<div align="center">
+  <img title="v19.2.8" alt="React" src="https://img.shields.io/badge/React-00809c?logo=react&logoColor=white">
+  <img title="v4.3.3" alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-38bdf8?logo=tailwindcss&logoColor=white">
+  <img title="v24.14.1" alt="Node js" src="https://img.shields.io/badge/Node_js-3e9e34?logo=nodedotjs&logoColor=white">
+  <img title="v8.2.0" alt="Vite" src="https://img.shields.io/badge/Vite-8d3fff?logo=vite&logoColor=white">
+  <img alt="Figma" src="https://img.shields.io/badge/Figma-fe7236?logo=figma&logoColor=white">
+</div>
+
+<br>
+
+<hr>
 
 O **CASDventário** é um sistema de gestão de inventário desenvolvido como **Trabalho de Conclusão de Curso (TCC)** na **ETEC Profa. Ilza Nascimento Pintus**, em parceria com a ONG **CASD**, de São José dos Campos – SP.
 
