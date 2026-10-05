@@ -1,3 +1,6 @@
+import { NavLink } from "react-router-dom";
+
+import NavMain from "./nav-main";
 import {
   Sidebar,
   SidebarContent,
@@ -18,12 +21,7 @@ import {
   BellIcon,
   GearIcon,
 } from "@phosphor-icons/react";
-import NavMain from "./nav-main";
-import NavSecondary from "./nav-secondary";
-import { NavLink } from "react-router-dom";
-import LogotypeBlue from "../assets/brand/casdventario-blue-logotype.svg";
 import LogoBlue from "../assets/brand/casdventario-blue-logo.svg";
-import ThemeSwitcher from "./theme-switcher";
 
 const data = {
   navMain: [
