@@ -11,7 +11,7 @@ import {
 import UsersDataTable from '../app/pages/app/user-management/columns';
 
 async function fetchUsers() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const response = await fetch('http://localhost:4000/users');
 
   if (!response.ok) {
     throw new Error(`Erro ao buscar usuários: ${response.status}`);
