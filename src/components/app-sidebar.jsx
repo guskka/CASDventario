@@ -86,18 +86,10 @@ export function AppSidebar() {
             <NavLink to={'/dashboard'}>
               <SidebarMenuButton
                 size="lg"
-                className="flex items-center justify-center"
+                className="data-[slot=sidebar-menu-button]:p-0.5! hover:bg-transparent"
               >
-                <img
-                  src={LogoBlue}
-                  alt=""
-                  className="w-42 hidden group-data-[collapsible=icon]:block group-data-[collapsible=icon]:p-1"
-                />
-                <img
-                  src={LogotypeBlue}
-                  alt=""
-                  className="w-42 group-data-[collapsible=icon]:hidden"
-                />
+                <img src={LogoBlue} alt="Logo CASDventário" className="w-8" />
+                <span className="text-lg font-bold text-primary">CASDventário</span>
               </SidebarMenuButton>
             </NavLink>
           </SidebarMenuItem>
