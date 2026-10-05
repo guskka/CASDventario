@@ -1,0 +1,164 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Felícia Macedo",
+      "username": "Roberta72",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "hugo_costa@gmail.com"
+    },
+    {
+      "id": "2",
+      "name": "Vitória Franco",
+      "username": "Daniel43",
+      "status": "PENDENTE",
+      "role": "BASICO",
+      "email": "feliciano_costa@live.com"
+    },
+    {
+      "id": "3",
+      "name": "João Miguel Souza",
+      "username": "Warley.Albuquerque",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "laura_saraiva75@bol.com.br"
+    },
+    {
+      "id": "4",
+      "name": "Dr. Pietro Batista",
+      "username": "Sara.Souza72",
+      "status": "ATIVO",
+      "role": "MESTRE",
+      "email": "eduarda38@gmail.com"
+    },
+    {
+      "id": "5",
+      "name": "Lavínia Saraiva Jr.",
+      "username": "Yuri_Costa",
+      "status": "INATIVO",
+      "role": "BASICO",
+      "email": "mariajulia_martins@gmail.com"
+    },
+    {
+      "id": "6",
+      "name": "Isaac Silva",
+      "username": "Julio.Braga",
+      "status": "INATIVO",
+      "role": "BASICO",
+      "email": "morgana59@hotmail.com"
+    },
+    {
+      "id": "7",
+      "name": "Bruna Silva",
+      "username": "Marina67",
+      "status": "ATIVO",
+      "role": "BASICO",
+      "email": "washington_silva@hotmail.com"
+    },
+    {
+      "id": "8",
+      "name": "Frederico Santos",
+      "username": "Felicia14",
+      "status": "ATIVO",
+      "role": "BASICO",
+      "email": "ofelia.moraes@bol.com.br"
+    },
+    {
+      "id": "9",
+      "name": "Márcia Souza",
+      "username": "Kleber_Reis22",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "nubia44@bol.com.br"
+    },
+    {
+      "id": "10",
+      "name": "Bryan Souza",
+      "username": "Cecilia_Oliveira",
+      "status": "INATIVO",
+      "role": "BASICO",
+      "email": "cesar59@bol.com.br"
+    },
+    {
+      "id": "11",
+      "name": "Benjamin Saraiva",
+      "username": "Helena_Batista",
+      "status": "ATIVO",
+      "role": "BASICO",
+      "email": "leonardo_melo83@yahoo.com"
+    },
+    {
+      "id": "12",
+      "name": "Margarida Moraes",
+      "username": "Felicia77",
+      "status": "INATIVO",
+      "role": "BASICO",
+      "email": "caua21@bol.com.br"
+    },
+    {
+      "id": "13",
+      "name": "Bruna Nogueira Neto",
+      "username": "Bernardo67",
+      "status": "INATIVO",
+      "role": "BASICO",
+      "email": "larissa83@gmail.com"
+    },
+    {
+      "id": "14",
+      "name": "Dra. Morgana Moreira",
+      "username": "Margarida.Souza12",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "enzo0@gmail.com"
+    },
+    {
+      "id": "15",
+      "name": "Benício Oliveira",
+      "username": "Bernardo_Oliveira28",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "frederico36@bol.com.br"
+    },
+    {
+      "id": "16",
+      "name": "Silas Reis",
+      "username": "Feliciano.Moraes22",
+      "status": "ATIVO",
+      "role": "MESTRE",
+      "email": "eduardo_silva@bol.com.br"
+    },
+    {
+      "id": "17",
+      "name": "Miguel Carvalho",
+      "username": "Daniel62",
+      "status": "ATIVO",
+      "role": "MESTRE",
+      "email": "lorena24@yahoo.com"
+    },
+    {
+      "id": "18",
+      "name": "Warley Braga",
+      "username": "Victor_Martins",
+      "status": "PENDENTE",
+      "role": "BASICO",
+      "email": "julia21@live.com"
+    },
+    {
+      "id": "19",
+      "name": "Sarah Santos Filho",
+      "username": "Alice_Souza",
+      "status": "PENDENTE",
+      "role": "MESTRE",
+      "email": "rebeca42@yahoo.com"
+    },
+    {
+      "id": "20",
+      "name": "Emanuel Moreira",
+      "username": "Carlos17",
+      "status": "ATIVO",
+      "role": "BASICO",
+      "email": "lucca_saraiva@bol.com.br"
+    }
+  ]
+}
