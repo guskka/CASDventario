@@ -13,13 +13,13 @@ import EditAdminDialog from './components/edit-admin-dialog';
 const columnHelper = createColumnHelper();
 
 export const columns = columnHelper.columns([
-  columnHelper.accessor('id_usuario', {
+  columnHelper.accessor('id', {
     header: 'ID',
 
     meta: { className: 'w-15' },
   }),
 
-  columnHelper.accessor('nome_completo', {
+  columnHelper.accessor('name', {
     header: 'Nome',
 
     cell: ({ getValue }) => {
