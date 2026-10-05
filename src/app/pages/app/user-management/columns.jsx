@@ -25,14 +25,14 @@ export const columns = columnHelper.columns([
     cell: ({ getValue }) => {
       const name = getValue();
 
-      const avatarUrl = `https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(
+      const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(
         name
       )}`;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <img
-            className="w-10 h-10"
+            className="w-8 h-8 rounded-full"
             src={avatarUrl}
             alt={`Avatar de ${name}`}
           />
