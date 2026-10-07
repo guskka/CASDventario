@@ -89,13 +89,15 @@ export const columns = columnHelper.columns([
   }),
 ]);
 
-export default function UsersDataTable({ users, filterValue }) {
+export default function UsersDataTable({ users, filterValue, sorting, onSortingChange }) {
   return (
     <DataTable
       columns={columns}
       data={users}
       pageSize={5}
       filterValue={filterValue}
+      sorting={sorting}
+      onSortingChange={onSortingChange}
     />
   );
 }
