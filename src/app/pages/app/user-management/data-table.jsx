@@ -32,7 +32,7 @@ export function DataTable({ columns, data, pageSize = 10, filterValue = '', sort
   });
 
   React.useEffect(() => {
-  table.getColumn('nome_completo')?.setFilterValue(filterValue);
+  table.getColumn('name')?.setFilterValue(filterValue);
 }, [filterValue, table]);
 
   return (
