@@ -44,12 +44,14 @@ export const columns = columnHelper.columns([
     },
   }),
 
-  columnHelper.accessor('username', {
-    header: 'Apelido',
+  columnHelper.accessor('email', {
+    header: 'Email',
   }),
 
   columnHelper.accessor('status', {
     header: 'Status',
+
+    meta: { className: 'w-1/8' },
 
     cell: ({ row }) => {
       const variantMap = {
@@ -66,10 +68,8 @@ export const columns = columnHelper.columns([
 
   columnHelper.accessor('role', {
     header: 'Cargo',
-  }),
 
-  columnHelper.accessor('email', {
-    header: 'Email'
+    meta: { className: 'w-1/8' },
   }),
 
   columnHelper.display({
