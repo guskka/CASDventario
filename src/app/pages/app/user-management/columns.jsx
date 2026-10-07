@@ -69,20 +69,7 @@ export const columns = columnHelper.columns([
   }),
 
   columnHelper.accessor('email', {
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="font-semibold"
-          onClick={() =>
-            column.toggleSorting(column.getIsSorted() === 'asc')
-          }
-        >
-          Email
-          <ArrowsDownUpIcon />
-        </Button>
-      );
-    },
+    header: 'Email'
   }),
 
   columnHelper.display({
