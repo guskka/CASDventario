@@ -5,6 +5,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { DataTable } from './data-table';
 
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 import { ArrowsDownUpIcon } from '@phosphor-icons/react';
 
@@ -49,6 +50,18 @@ export const columns = columnHelper.columns([
 
   columnHelper.accessor('status', {
     header: 'Status',
+
+    cell: ({ row }) => {
+      const variantMap = {
+        ATIVO: "default",
+        PENDENTE: "outline",
+        INATIVO: "destructive"
+      }
+
+      return (
+        <Badge variant={variantMap[row.original.status]}>{row.original.status}</Badge>
+      )
+    }
   }),
 
   columnHelper.accessor('role', {
