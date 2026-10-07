@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -42,7 +42,7 @@ export default function TableSection({ title }) {
       return;
     }
 
-    getSorted([{ id: columnId, desc: sorted[0]?.desc}]);
+    getSorted([{ id: columnId, desc: sorted[0]?.desc }]);
   };
 
   useEffect(() => {
@@ -62,16 +62,18 @@ export default function TableSection({ title }) {
 
         <div className="flex gap-4">
           <div className="flex gap-2">
-            <Label htmlFor="orderby">Ordernar por:</Label>
             <Select
               items={ORDER_BY}
               value={sorted[0]?.id}
               onValueChange={handleOrderByChange}
               defaultValue="order_status"
             >
-              <SelectTrigger id="orderby">
-                <SelectValue placeholder="Ordernar por:" />
-              </SelectTrigger>
+              <Tooltip>
+                <TooltipTrigger render={<SelectTrigger />}>
+                  <SelectValue />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Ordenar por</TooltipContent>
+              </Tooltip>
               <SelectContent>
                 <SelectGroup>
                   {ORDER_BY.map((item) => (
