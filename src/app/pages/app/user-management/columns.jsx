@@ -65,7 +65,7 @@ export const columns = columnHelper.columns([
   }),
 
   columnHelper.accessor('role', {
-    header: 'Tipo',
+    header: 'Cargo',
   }),
 
   columnHelper.accessor('email', {
