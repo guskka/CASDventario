@@ -19,7 +19,7 @@ export default function ThemeSwitcher() {
   };
 
   return (
-    <Button variant="theme" size="icon" onClick={toggleTheme}>
+    <Button variant="ghost" size="icon" onClick={toggleTheme}>
       <SunIcon
         weight="regular"
         className={`absolute group-hover:hidden h-[1.2rem] w-[1.2rem] scale-100 rotate-0 duration-500 transition-all dark:scale-0 dark:-rotate-90`}
