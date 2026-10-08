@@ -35,13 +35,12 @@ function gerarSenhaTemporaria() {
 
 export default function AddAdminDialog() {
   const ADM_ROLES = [
-    { label: 'Administrador Básico', value: 'normalAdm' },
-    { label: 'Administrador Mestre', value: 'masterAdm' },
+    { label: 'Administrador Básico', value: 'BASICO' },
+    { label: 'Administrador Mestre', value: 'MESTRE' },
   ];
 
   const [openDialog, setOpenDialog] = useState(false);
   const [nome, setNome] = useState('');
-  const [sobrenome, setSobrenome] = useState('');
   const [email, setEmail] = useState('');
   const [cargo, setCargo] = useState('');
   const [erro, setErro] = useState('');
@@ -49,7 +48,6 @@ export default function AddAdminDialog() {
 
   function limparFormulario() {
     setNome('');
-    setSobrenome('');
     setEmail('');
     setCargo('');
     setErro('');
@@ -64,13 +62,12 @@ export default function AddAdminDialog() {
       const senhaTemporaria = gerarSenhaTemporaria();
 
       await cadastrarUsuario({
-        nome: `${nome} ${sobrenome}`.trim(),
+        nome_completo: nome,
         email,
         senha: senhaTemporaria,
-        apelido: nome,
         // O banco espera "BASICO" ou "administrador" (tb_usuario_tipo_usuario).
         // O banco aceita "BASICO" ou "MESTRE" (enum tb_usuario_tipo).
-        tipo: cargo === 'masterAdm' ? 'MESTRE' : 'BASICO',
+        tipo: cargo,
       });
 
       // TCC: mostra a senha temporária pra quem cadastrou repassar pro novo
@@ -110,7 +107,6 @@ export default function AddAdminDialog() {
             {erro && (
               <p className="text-sm text-destructive">{erro}</p>
             )}
-            <div className="grid grid-cols-2 gap-4">
               <Field>
                 <Label htmlFor="name">
                   Nome
@@ -123,19 +119,6 @@ export default function AddAdminDialog() {
                   onChange={(e) => setNome(e.target.value)}
                 />
               </Field>
-              <Field>
-                <Label htmlFor="surname">
-                  Sobrenome
-                  <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  required
-                  id="surname"
-                  value={sobrenome}
-                  onChange={(e) => setSobrenome(e.target.value)}
-                />
-              </Field>
-            </div>
             <Field>
               <Label htmlFor="email">
                 Email
