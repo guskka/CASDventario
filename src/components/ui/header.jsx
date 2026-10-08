@@ -63,7 +63,7 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
               />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="min-w-42">
+          <DropdownMenuContent className="min-w-52">
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex items-center gap-2">
