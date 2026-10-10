@@ -5,6 +5,12 @@ import AddAdminDialog from './components/add-admin-dialog';
 import AdmManagementTabs from './components/adm-management-tabs';
 
 export default function AdmUserManagement() {
+  const user = "Adminstrador";
+  const roles = [
+    { label: "Administrador Básico", value: "BASICO" },
+    { label: "Administrador Mestre", value: "MESTRE" },
+  ];
+  
   return (
     <SidebarProvider>
       <div className="flex w-full font-geist">
@@ -12,8 +18,8 @@ export default function AdmUserManagement() {
         <div className="flex flex-1 flex-col min-w-0 w-full h-full">
           <Header
             headerTitle={'Administradores'}
-            AccountName={'Administrador'}
-            AccountPosition={'CEO'}
+            AccountName={user}
+            AccountPosition={roles[0].label}
           />
           <main className="flex-1 overflow-y-hidden">
             <div className="px-6 pt-6 space-y-6">

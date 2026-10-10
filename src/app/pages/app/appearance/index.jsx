@@ -4,12 +4,18 @@ import Header from "@/components/ui/header";
 import CardThemes from "./card-themes";
 
 export default function AppearancePage() {
+  const user = "Adminstrador";
+  const roles = [
+    { label: "Administrador Básico", value: "BASICO" },
+    { label: "Administrador Mestre", value: "MESTRE" },
+  ];
+  
   return (
     <SidebarProvider>
       <div className="flex w-full font-geist">
         <AppSidebar />
         <div className="flex flex-1 flex-col min-w-0 w-full h-full">
-          <Header headerTitle={"Aparência"} AccountName={"Administrador"} AccountPosition={"CEO"} />
+          <Header headerTitle={"Aparência"} AccountName={user} AccountPosition={roles[0].label} />
           <main className="flex-1 px-6 pt-6">
             <div className="space-y-6">
               <div className="flex flex-col">
