@@ -1,12 +1,6 @@
 import { Link } from "react-router-dom";
 
-import {
-  BellIcon,
-  UserIcon,
-  GearIcon,
-  SignOutIcon,
-  PaintBrushIcon,
-} from "@phosphor-icons/react";
+import { BellIcon, UserIcon, GearIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
 import ThemeSwitcher from "../theme-switcher";
 import {
@@ -86,10 +80,12 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
                 <GearIcon />
                 Configurações
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <PaintBrushIcon />
-                Aparência
-              </DropdownMenuItem>
+              <Link to={"/appearence"}>
+                <DropdownMenuItem>
+                  <PaintBrushIcon />
+                  Aparência
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <SignOutIcon />
@@ -98,7 +94,6 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ThemeSwitcher />
       </div>
     </header>
   );
