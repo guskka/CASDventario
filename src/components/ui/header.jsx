@@ -94,7 +94,6 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ThemeSwitcher />
       </div>
     </header>
   );
