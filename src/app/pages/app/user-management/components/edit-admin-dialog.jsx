@@ -28,8 +28,8 @@ export default function EditAdminDialog({ user }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [name, setName] = useState(user.name);
   const [username, setUsername] = useState(user.username);
-  const [status, setStatus] = useState(user.status);
-  const [role, setRole] = useState(user.role);
+  const [status] = useState(user.status);
+  const [role] = useState(user.role);
 
   const ADM_ROLES = [
     { label: 'Administrador Básico', value: 'BASICO' },
@@ -78,7 +78,7 @@ export default function EditAdminDialog({ user }) {
             </Field>
             <Field>
               <Label htmlFor="status">Status</Label>
-              <Select required id="status" items={ADM_STATUS}>
+              <Select required id="status" items={ADM_STATUS} defaultValue={status === "PENDENTE" ? "ATIVO" : status}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um status" />
                 </SelectTrigger>
@@ -94,8 +94,8 @@ export default function EditAdminDialog({ user }) {
               </Select>
             </Field>
             <Field>
-              <Label htmlFor="role">Tipo</Label>
-              <Select required id="role" items={ADM_ROLES}>
+              <Label htmlFor="role">Cargo</Label>
+              <Select required id="role" items={ADM_ROLES} defaultValue={role}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um cargo" />
                 </SelectTrigger>

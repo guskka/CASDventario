@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   BellIcon,
-  DotsThreeVerticalIcon,
   UserIcon,
   GearIcon,
   SignOutIcon,
-} from '@phosphor-icons/react';
+  PaintBrushIcon,
+} from "@phosphor-icons/react";
 
-import ThemeSwitcher from '../theme-switcher';
+import ThemeSwitcher from "../theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +16,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from './dropdown-menu';
-import { Button } from './button';
-import { Separator } from './separator';
-import { SidebarTrigger } from './sidebar';
+  DropdownMenuLabel,
+} from "./dropdown-menu";
+import { Button } from "./button";
+import { Separator } from "./separator";
+import { SidebarTrigger } from "./sidebar";
 
 export default function Header({ headerTitle, AccountName, AccountPosition }) {
-  const avatarUrl = `https://api.dicebear.com/10.x/lorelei/svg?seed=${encodeURIComponent(AccountName)}`;
+  const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(AccountName)}`;
 
   return (
     <header className="flex items-center justify-between w-full h-24 px-6 border-b">
@@ -31,14 +32,14 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
         <Separator orientation="vertical" />
         <h2 className="font-semibold text-xl">{headerTitle}</h2>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="outline" size="icon">
+            <Button variant="ghost" size="icon">
               <BellIcon />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align="end">
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <p>notificação1</p>
@@ -51,40 +52,45 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Separator orientation="vertical" />
+
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button variant="ghost" size="lg" className="flex h-12">
               <img
-                className="w-10 h-10"
+                className="w-8 h-8 rounded-full"
                 src={avatarUrl}
                 alt={`Avatar de ${AccountName}`}
               />
-              <div className="flex flex-col items-start">
-                <p className="font-medium">{AccountName}</p>
-                <p className="text-xs text-muted-foreground">
-                  {AccountPosition}
-                </p>
-              </div>
-              <DotsThreeVerticalIcon weight="bold" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="min-w-52">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>
+                <div className="flex items-center gap-2">
+                  <img src={avatarUrl} className="w-8 h-8 rounded-full" />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-foreground">{AccountName}</span>
+                    <span>{AccountPosition}</span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserIcon />
                 Perfil
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <GearIcon />
                 Configurações
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <PaintBrushIcon />
+                Aparência
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <SignOutIcon />
                 Sair

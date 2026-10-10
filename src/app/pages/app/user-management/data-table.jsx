@@ -15,9 +15,7 @@ import {
 import { features } from './data-table-features';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
-export function DataTable({ columns, data, pageSize = 10, filterValue = '' }) {
-  const [sorting, setSorting] = React.useState([]);
-
+export function DataTable({ columns, data, pageSize = 10, filterValue = '', sorting, onSortingChange }) {
   const table = useTable({
     features,
     data,
@@ -30,11 +28,11 @@ export function DataTable({ columns, data, pageSize = 10, filterValue = '' }) {
     state: {
       sorting,
     },
-    onSortingChange: setSorting,
+    onSortingChange,
   });
 
   React.useEffect(() => {
-  table.getColumn('nome_completo')?.setFilterValue(filterValue);
+  table.getColumn('name')?.setFilterValue(filterValue);
 }, [filterValue, table]);
 
   return (
