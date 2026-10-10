@@ -15,11 +15,11 @@ export default function AppearancePage() {
               <div className="flex flex-col">
                 <h3 className="font-semibold text-xl">Preferência de tema</h3>
                 <p className="text-sm line text-muted-foreground">
-                  Escolha como o CASDventário combina com você. Selecione um único tema entre modo
+                  Escolha a aparência que mais combina com você. Selecione entre o modo
                   claro ou escuro.
                 </p>
                 <p className="text-sm line text-muted-foreground">
-                  Após selecionar, será aplicado imediatamente e salvo automaticamente.
+                  Após selecionar, a alteração é aplicada na hora e salva automaticamente.
                 </p>
               </div>
               <div className="flex flex-col">
