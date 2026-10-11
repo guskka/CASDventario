@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 import { BellIcon, UserIcon, GearIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
-import ThemeSwitcher from "../theme-switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,10 +70,12 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserIcon />
-                Perfil
-              </DropdownMenuItem>
+              <Link to={"/profile"}>
+                <DropdownMenuItem>
+                  <UserIcon />
+                  Perfil
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <GearIcon />
