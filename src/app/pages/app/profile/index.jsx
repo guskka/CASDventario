@@ -176,8 +176,8 @@ export default function ProfilePage() {
               <div className="flex flex-col">
                 <h3 className="font-semibold text-xl text-destructive">Desativar conta</h3>
                 <p className="text-sm line text-muted-foreground">
-                  Depois de desativar sua conta, não há como você entrar mais em nosso sistema. Caso
-                  mude de ideia, peça a um administrador para reativa-lá
+                  Ao desativar sua conta, você perderá o acesso ao sistema. Caso mude de ideia,
+                  solicite a reativaçẽo a um adiministrador.
                 </p>
               </div>
               <Dialog>
