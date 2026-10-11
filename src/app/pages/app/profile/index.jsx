@@ -17,6 +17,16 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useRef } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function ProfilePage() {
   const [user, setUser] = useState("Adminstrador");
@@ -170,7 +180,24 @@ export default function ProfilePage() {
                   mude de ideia, peça a um administrador para reativa-lá
                 </p>
               </div>
-              <Button variant="destructive">Desativar minha conta</Button>
+              <Dialog>
+                <DialogTrigger
+                  render={<Button variant="destructive">Desativar minha conta</Button>}
+                />
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Deseja realmente desativar sua conta?</DialogTitle>
+                    <DialogDescription>
+                      Esta ação encerrará sua sessão atual e bloqueará seu acesso ao sistema até que
+                      um administrador realize a reativação.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose render={<Button variant="outline">Cancelar</Button>} />
+                    <Button variant="destructive">Sim, desativar conta</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </main>
         </div>
