@@ -1,8 +1,8 @@
 <div align="center">
 
 <h1>
-  <img src="src/assets/brand/casdventario-blue-logo.svg" alt="Logo CASDventario" width="48" align="absmiddle" />
-  CASDventario
+  <img src="src/assets/brand/casdventario-blue-logo.svg" alt="Logo CASDventário" width="48" align="absmiddle" />
+  CASDventário
 </h1>
 
 **Sistema web de gestão de estoque, kits e empréstimo de notebooks da ONG CASD**
@@ -22,7 +22,7 @@ O **CASDventário** é um sistema de gestão de inventário desenvolvido como **
 
 A ONG distribui **kits** e realiza o **empréstimo de notebooks** a alunos, e esse controle era feito manualmente. O sistema automatiza o processo, registrando entradas de remessas, entregas de kits, empréstimos e devoluções de notebooks, além de gerenciar os usuários que operam a plataforma.
 
-> ⚠️ **Este repositório contém apenas o frontend.** A API e o banco de dados ficam em um repositório privado separado, o `CASDventario-Backend`. Veja a seção [Arquitetura](#️-arquitetura).
+> ⚠️ **Este repositório contém apenas o frontend.** A API e o banco de dados ficam em um repositório privado separado, o `CASDventário-Backend`. Veja a seção [Arquitetura](#️-arquitetura).
 
 ## 📑 Sumário
 
@@ -54,7 +54,7 @@ A ONG distribui **kits** e realiza o **empréstimo de notebooks** a alunos, e es
 
 ```text
 Navegador (React + Vite)  ──HTTP/JSON──▶  API (Fastify)  ──Prisma──▶  MariaDB (db_casdventario)
-└────── este repositório ──────┘          └────────── CASDventario-Backend (privado) ──────────┘
+└────── este repositório ──────┘          └────────── CASDventário-Backend (privado) ──────────┘
 ```
 
 O backend é responsável por expor a **API REST** consumida por este frontend, acessar o banco de dados **MariaDB** e aplicar as regras de negócio, como a baixa automática do estoque na entrega de kits e a atualização do status do notebook em empréstimos e devoluções.
@@ -77,7 +77,7 @@ Consulte [Implantação](#-implantação) para saber como gerar a versão de pro
   ```
 
 - **[XAMPP](https://www.apachefriends.org/)** (ou LAMPP, no Linux), pois o **MariaDB** usado pelo sistema roda por ele.
-- O **backend** (`CASDventario-Backend`) em execução, para que login, cadastro e listagens funcionem.
+- O **backend** (`CASDventário-Backend`) em execução, para que login, cadastro e listagens funcionem.
 - **[Git](https://git-scm.com/)** *(opcional: necessário apenas para clonar o repositório e contribuir; também é possível baixar o ZIP pelo GitHub)*.
 
 ### 🔧 Instalação
@@ -104,13 +104,13 @@ Windows: abra o **XAMPP Control Panel** e clique em **Start** no módulo **MySQL
 
 **2. Inicie o backend**
 
-Com o MariaDB ativo, inicie o `CASDventario-Backend` seguindo o README dele (requer acesso ao repositório).
+Com o MariaDB ativo, inicie o `CASDventário-Backend` seguindo o README dele (requer acesso ao repositório).
 
 **3. Clone o repositório do frontend**
 
 ```bash
-git clone https://github.com/guskka/CASDventario.git
-cd CASDventario
+git clone https://github.com/guskka/CASDventário.git
+cd CASDventário
 ```
 
 **4. Instale as dependências**
@@ -144,7 +144,7 @@ XAMPP (MariaDB)  →  Backend (API)  →  Frontend (npm run dev)
 ## 🗂️ Estrutura de pastas
 
 ```text
-CASDventario/
+CASDventário/
 ├── .github/
 │   └── ISSUE_TEMPLATE/     # Templates de issues (macro issues)
 ├── .vscode/                # Configurações do editor
@@ -178,7 +178,7 @@ Para gerar a versão de produção do frontend:
 npm run build
 ```
 
-Os arquivos estáticos otimizados são gerados na pasta `dist/` e podem ser publicados em qualquer servidor web. Em produção, o frontend precisa conseguir acessar a API do `CASDventario-Backend`, que por sua vez depende do banco de dados MariaDB em execução.
+Os arquivos estáticos otimizados são gerados na pasta `dist/` e podem ser publicados em qualquer servidor web. Em produção, o frontend precisa conseguir acessar a API do `CASDventário-Backend`, que por sua vez depende do banco de dados MariaDB em execução.
 
 ## 🛠️ Construído com
 
@@ -216,7 +216,7 @@ Tarefas maiores são registradas por meio dos templates de *issue* disponíveis 
 - **Rafael Tobias Jesus de Campos** - [@Fells](https://github.com/rafael-tjc)
 - **Guilherme Fabian Braga** - [@Itsguiaround](https://github.com/Itsguiaround)
 
-Você também pode ver a lista de todos os [colaboradores](https://github.com/guskka/CASDventario/graphs/contributors) que participaram deste projeto.
+Você também pode ver a lista de todos os [colaboradores](https://github.com/guskka/CASDventário/graphs/contributors) que participaram deste projeto.
 
 ## 📄 Licença
 
