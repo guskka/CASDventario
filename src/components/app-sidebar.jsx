@@ -17,7 +17,6 @@ import {
   LaptopIcon,
   UserGearIcon,
   StudentIcon,
-  BellIcon,
   HandHeartIcon,
   ArrowsLeftRightIcon,
 } from "@phosphor-icons/react";
@@ -73,11 +72,6 @@ const data = {
       title: "Perfil",
       url: "/",
       icon: UserIcon,
-    },
-    {
-      title: "Notificações",
-      url: "/",
-      icon: BellIcon,
     },
   ],
 };

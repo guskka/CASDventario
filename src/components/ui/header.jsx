@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
 import { usuarioLogado, encerrarSessao } from "@/lib/api";
-import SinoNotificacoes from "@/components/sino-notificacoes";
 import { urlAvatar } from "@/lib/avatar";
 
 import {
@@ -49,9 +48,6 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
         <h2 className="font-semibold text-xl">{headerTitle}</h2>
       </div>
       <div className="flex items-center gap-2">
-        {/* Notificações: empréstimos atrasados */}
-        <SinoNotificacoes />
-
         <DropdownMenu>
           <DropdownMenuTrigger
             render={<Button variant="ghost" size="lg" className="flex h-12" aria-label="Menu da conta" />}
