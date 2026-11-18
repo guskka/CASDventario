@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { UserIcon, GearIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
+import { UserIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
 import { usuarioLogado, encerrarSessao } from "@/lib/api";
 import SinoNotificacoes from "@/components/sino-notificacoes";
@@ -81,14 +81,6 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
-              {/* Por enquanto, Configurações abre a Aparência (D11). A tela completa de
-                  Configurações está em "Depois do principal" no PLAN.md. */}
-              <Link to={"/appearence"}>
-                <DropdownMenuItem>
-                  <GearIcon />
-                  Configurações
-                </DropdownMenuItem>
-              </Link>
               <Link to={"/appearence"}>
                 <DropdownMenuItem>
                   <PaintBrushIcon />
