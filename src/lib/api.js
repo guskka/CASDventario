@@ -98,6 +98,11 @@ export function cadastrarUsuario({ nome, email, apelido, tipo }) {
   });
 }
 
+// Histórico de alterações (aba Logs, só Mestre). Os mais recentes primeiro.
+export function listarLogs() {
+  return request("/logs");
+}
+
 // Reenvia o convite de uma conta PENDENTE (o link anterior deixa de valer).
 export function reenviarConvite(id) {
   return request(`/usuarios/${id}/reenviar-convite`, { method: "POST" });

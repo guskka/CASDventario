@@ -15,7 +15,16 @@ import {
 import { features } from './data-table-features';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
-export function DataTable({ columns, data, pageSize = 10, filterValue = '', sorting, onSortingChange }) {
+// filterColumn: id da coluna usada pela busca (padrão "name").
+export function DataTable({
+  columns,
+  data,
+  pageSize = 10,
+  filterValue = '',
+  filterColumn = 'name',
+  sorting,
+  onSortingChange,
+}) {
   const table = useTable({
     features,
     data,
@@ -32,8 +41,8 @@ export function DataTable({ columns, data, pageSize = 10, filterValue = '', sort
   });
 
   React.useEffect(() => {
-  table.getColumn('name')?.setFilterValue(filterValue);
-}, [filterValue, table]);
+    table.getColumn(filterColumn)?.setFilterValue(filterValue);
+  }, [filterValue, filterColumn, table]);
 
   return (
     <div className='flex flex-col gap-4'>

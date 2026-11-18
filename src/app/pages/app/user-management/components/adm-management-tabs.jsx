@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import TableSection from '@/components/table-section';
+import LogsSection from './logs-section';
 
 export default function AdmManagementTabs() {
   return (
@@ -12,7 +13,7 @@ export default function AdmManagementTabs() {
         <TableSection title="Administradores" />
       </TabsContent>
       <TabsContent value="administratorsLog">
-        <TableSection title="Logs" />
+        <LogsSection />
       </TabsContent>
     </Tabs>
   );
