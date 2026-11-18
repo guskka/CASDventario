@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeftIcon } from '@phosphor-icons/react';
+import { ArrowLeftIcon, CheckCircleIcon, CircleIcon } from '@phosphor-icons/react';
 import LogoWhite from '../../../../assets/brand/casdventario-white-logo.svg';
 import LogotypeBlack from '../../../../assets/brand/casdventario-black-logotype.svg';
 import LogotypeWhite from '../../../../assets/brand/casdventario-white-logotype.svg';
 import InputFloatingLabel from '../../../../components/ui/input-floating-label';
 import { Button } from '@/components/ui/button';
 import { definirSenha } from '@/lib/api';
-
-// Mesma regra do backend: pelo menos 8 caracteres, 1 número e 1 maiúscula.
-function senhaValida(senha) {
-  return /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(senha);
-}
+import { REGRAS_SENHA, mensagemSenha } from '@/lib/senha';
 
 // Tela aberta pelo link do email (convite de novo administrador ou
 // "esqueci minha senha"): /definir-senha?token=...
@@ -30,12 +26,14 @@ export default function DefinirSenha() {
     event.preventDefault();
     setErro('');
 
-    if (senha !== confirmarSenha) {
-      setErro('As senhas devem ser as mesmas.');
+    // Primeiro a regra da senha (diz exatamente o que falta), depois a confirmação.
+    const problema = mensagemSenha(senha);
+    if (problema) {
+      setErro(problema);
       return;
     }
-    if (!senhaValida(senha)) {
-      setErro('A senha deve ter pelo menos 8 caracteres, incluindo um número e uma letra maiúscula.');
+    if (senha !== confirmarSenha) {
+      setErro('As duas senhas digitadas não são iguais.');
       return;
     }
 
@@ -88,10 +86,21 @@ export default function DefinirSenha() {
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
               />
-              <p className="text-sm text-muted-foreground">
-                *A senha deve ter pelo menos 8 caracteres, incluindo um número e uma letra
-                maiúscula.
-              </p>
+              {/* Lista que vai se marcando enquanto a pessoa digita */}
+              <ul className="space-y-1 pt-1 text-sm">
+                {REGRAS_SENHA.map((regra) => {
+                  const ok = regra.ok(senha);
+                  return (
+                    <li
+                      key={regra.texto}
+                      className={`flex items-center gap-2 ${ok ? 'text-primary' : 'text-muted-foreground'}`}
+                    >
+                      {ok ? <CheckCircleIcon weight="fill" /> : <CircleIcon />}
+                      {regra.texto}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
             <InputFloatingLabel
               text={'Confirmar senha'}
