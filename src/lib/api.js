@@ -294,6 +294,20 @@ export function desfazerEmprestimo(id) {
   return request(`/emprestimos/${id}`, { method: "DELETE" });
 }
 
+// dados: { emprestimoId, checklist: {...}, dataDevolucao?, enviarParaManutencao? }
+// O notebook volta a ficar disponível, ou vai para manutenção se voltou com dano.
+export function registrarDevolucao(dados) {
+  return request("/devolucoes", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+}
+
+// Desfaz uma devolução registrada por engano (o empréstimo volta a ficar em aberto).
+export function desfazerDevolucao(id) {
+  return request(`/devolucoes/${id}`, { method: "DELETE" });
+}
+
 // ============================================================
 //  NOTEBOOKS
 // ============================================================

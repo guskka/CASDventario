@@ -72,3 +72,22 @@ export function hojeMaisDias(dias) {
 }
 
 export const PRAZO_PADRAO_DIAS = 30;
+
+// Mesma regra do backend (decisão D7): estes estados contam como dano e mandam
+// o notebook para manutenção na devolução.
+const ESTADOS_COM_DANO = ['DANIFICADO', 'ALGUMAS_DANIFICADAS', 'NENHUMA_FUNCIONA'];
+
+// valores = { carcaca: 'OTIMO', ... } (chaves camelCase). Retorna os nomes das partes com dano.
+export function partesComDano(valores) {
+  return PARTES_CHECKLIST.filter((parte) => ESTADOS_COM_DANO.includes(valores[parte.chave])).map(
+    (parte) => parte.label,
+  );
+}
+
+// Checklist que veio da API (colunas snake_case) -> valores do formulário (camelCase).
+export function checklistParaFormulario(checklist) {
+  if (!checklist) {
+    return checklistPadrao();
+  }
+  return Object.fromEntries(PARTES_CHECKLIST.map((parte) => [parte.chave, checklist[parte.coluna]]));
+}

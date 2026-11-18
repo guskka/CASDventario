@@ -17,16 +17,23 @@ import {
 import { formatarDataSemHora } from '../../remessas/remessas-textos';
 import { PARTES_CHECKLIST, rotuloEstado, situacao, temProblema } from '../emprestimos-textos';
 
-function Estado({ valor }) {
+function Estado({ valor, mudou }) {
   if (valor === undefined) {
     return <span className="text-muted-foreground">—</span>;
   }
   return (
     <span className={temProblema(valor) ? 'font-medium text-destructive' : undefined}>
       {rotuloEstado(valor)}
+      {mudou && <span className="ml-1 text-xs text-muted-foreground">(mudou)</span>}
     </span>
   );
 }
+
+const STATUS_NOTEBOOK = {
+  DISPONIVEL: 'Disponível',
+  INDISPONIVEL: 'Indisponível (emprestado)',
+  MANUTENCAO: 'Em manutenção',
+};
 
 // Janela aberta ao clicar num empréstimo: dados do empréstimo e o checklist
 // (estado na saída e, depois da devolução, o estado na volta, lado a lado).
@@ -70,6 +77,8 @@ export default function EmprestimoDetalhesDialog({ emprestimo, onFechar }) {
               </dd>
               <dt className="text-muted-foreground">Registrado por</dt>
               <dd>{emprestimo.registrado_por}</dd>
+              <dt className="text-muted-foreground">Notebook agora</dt>
+              <dd>{STATUS_NOTEBOOK[emprestimo.status_notebook] ?? emprestimo.status_notebook}</dd>
             </dl>
 
             <div className="rounded-md border">
@@ -90,7 +99,10 @@ export default function EmprestimoDetalhesDialog({ emprestimo, onFechar }) {
                       </TableCell>
                       {volta && (
                         <TableCell>
-                          <Estado valor={volta[parte.coluna]} />
+                          <Estado
+                            valor={volta[parte.coluna]}
+                            mudou={volta[parte.coluna] !== saida?.[parte.coluna]}
+                          />
                         </TableCell>
                       )}
                     </TableRow>

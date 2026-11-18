@@ -18,8 +18,8 @@ export default function EmprestimosPage() {
                 <div>
                   <h3 className="font-semibold text-xl">Empréstimos de notebook</h3>
                   <p className="text-sm line text-muted-foreground">
-                    Registre o empréstimo com o checklist de saída. O status do notebook muda
-                    automaticamente.
+                    Registre empréstimos e devoluções com o checklist do notebook. O status do
+                    notebook muda automaticamente.
                   </p>
                 </div>
                 <EmprestimoDialog />

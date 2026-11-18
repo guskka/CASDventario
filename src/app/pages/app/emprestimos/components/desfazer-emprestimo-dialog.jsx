@@ -69,7 +69,7 @@ export default function DesfazerEmprestimoDialog({ emprestimo }) {
           <DialogDescription>
             O empréstimo ({emprestimo.descricao}) e o checklist de saída serão apagados, e o
             notebook volta a ficar disponível. Use isto só para corrigir um registro feito por
-            engano.
+            engano. Se o aluno devolveu o notebook, use &ldquo;Registrar devolução&rdquo;.
           </DialogDescription>
         </DialogHeader>
         {erro && <p className="text-sm text-destructive">{erro}</p>}

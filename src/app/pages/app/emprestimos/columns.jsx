@@ -4,6 +4,8 @@ import { DataTable } from '../user-management/data-table';
 import { Badge } from '@/components/ui/badge';
 import PrazoDialog from './components/prazo-dialog';
 import DesfazerEmprestimoDialog from './components/desfazer-emprestimo-dialog';
+import DevolucaoDialog from './components/devolucao-dialog';
+import DesfazerDevolucaoDialog from './components/desfazer-devolucao-dialog';
 import { formatarDataSemHora } from '../remessas/remessas-textos';
 import { situacao } from './emprestimos-textos';
 
@@ -60,15 +62,21 @@ const emprestimosColumns = columnHelper.columns([
 
   columnHelper.display({
     id: 'acoes',
-    meta: { className: 'w-24' },
+    meta: { className: 'w-32' },
     // stopPropagation: clicar nos botões (ou nas janelas deles) não abre os detalhes.
-    cell: ({ row }) =>
-      row.original.situacao === 'DEVOLVIDO' ? null : (
-        <div className="flex" onClick={(e) => e.stopPropagation()}>
-          <PrazoDialog emprestimo={row.original} />
-          <DesfazerEmprestimoDialog emprestimo={row.original} />
-        </div>
-      ),
+    cell: ({ row }) => (
+      <div className="flex" onClick={(e) => e.stopPropagation()}>
+        {row.original.situacao === 'DEVOLVIDO' ? (
+          <DesfazerDevolucaoDialog emprestimo={row.original} />
+        ) : (
+          <>
+            <DevolucaoDialog emprestimo={row.original} />
+            <PrazoDialog emprestimo={row.original} />
+            <DesfazerEmprestimoDialog emprestimo={row.original} />
+          </>
+        )}
+      </div>
+    ),
   }),
 ]);
 
