@@ -1,67 +1,110 @@
+import { useMemo } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 
 import { DataTable } from '../user-management/data-table';
-import DesfazerEntregaDialog from './components/desfazer-entrega-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 
-// Colunas da lista de entregas de kits, no mesmo modelo das outras listas.
+// Lista de chamada de um material: cada linha é um aluno ativo. A caixinha
+// marcada = o aluno já recebeu (marcar registra a entrega; desmarcar pede
+// confirmação). As ações vêm da seção (entregas-section.jsx).
 
 const columnHelper = createColumnHelper();
 
-const entregasColumns = columnHelper.columns([
-  columnHelper.accessor('id_entrega_kit', {
-    header: 'Nº',
-    meta: { className: 'w-16' },
-  }),
+function criarColunas({ salvando, esgotado, aoMarcar, aoDesmarcar }) {
+  return columnHelper.columns([
+    columnHelper.display({
+      id: 'recebeu',
+      meta: { className: 'w-12' },
+      cell: ({ row }) => {
+        const aluno = row.original;
+        const recebeu = Boolean(aluno.entrega);
+        return (
+          <Checkbox
+            checked={recebeu}
+            disabled={salvando.has(aluno.rm_aluno) || (!recebeu && esgotado)}
+            onCheckedChange={(marcado) => (marcado ? aoMarcar(aluno) : aoDesmarcar(aluno))}
+            aria-label={
+              recebeu
+                ? `Desfazer a entrega de ${aluno.nome_completo}`
+                : `Registrar a entrega para ${aluno.nome_completo}`
+            }
+          />
+        );
+      },
+    }),
 
-  columnHelper.accessor('data_entrega_kit', {
-    header: 'Data',
-    meta: { className: 'w-32' },
-    cell: ({ getValue }) => new Date(getValue()).toLocaleDateString('pt-BR'),
-  }),
+    columnHelper.accessor('nome_completo', {
+      id: 'aluno',
+      header: 'Aluno',
+      cell: ({ getValue }) => <span className="font-medium">{getValue()}</span>,
+    }),
 
-  // A busca procura aqui: aluno + RM + material.
-  columnHelper.accessor((e) => `${e.aluno} ${e.rm_aluno} ${e.material}`, {
-    id: 'aluno',
-    header: 'Aluno',
-    cell: ({ row }) => (
-      <div className="min-w-0">
-        <p className="truncate font-medium">{row.original.aluno}</p>
-        <p className="text-xs text-muted-foreground">RM {row.original.rm_aluno}</p>
-      </div>
-    ),
-  }),
+    columnHelper.display({
+      id: 'situacao',
+      header: 'Situação',
+      meta: { className: 'w-32' },
+      cell: ({ row }) =>
+        row.original.entrega ? (
+          <Badge>Recebido</Badge>
+        ) : (
+          <Badge variant="outline">Pendente</Badge>
+        ),
+    }),
 
-  columnHelper.accessor('material', {
-    header: 'Material',
-  }),
+    columnHelper.accessor('rm_aluno', {
+      header: 'RM',
+      meta: { className: 'w-28' },
+    }),
 
-  columnHelper.accessor('qtd_entregue', {
-    header: 'Qtd.',
-    meta: { className: 'w-20' },
-  }),
+    columnHelper.accessor('turma', {
+      header: 'Turma',
+      meta: { className: 'w-20' },
+      cell: ({ getValue }) => getValue() ?? '—',
+    }),
 
-  columnHelper.accessor('registrado_por', {
-    header: 'Registrado por',
-    meta: { className: 'w-48' },
-  }),
+    columnHelper.accessor('email', {
+      header: 'Email',
+    }),
 
-  columnHelper.display({
-    id: 'acoes',
-    meta: { className: 'w-16' },
-    cell: ({ row }) => <DesfazerEntregaDialog entrega={row.original} />,
-  }),
-]);
+    columnHelper.display({
+      id: 'entregue_em',
+      header: 'Entregue em',
+      meta: { className: 'w-52' },
+      cell: ({ row }) => {
+        const entrega = row.original.entrega;
+        if (!entrega) {
+          return <span className="text-muted-foreground">—</span>;
+        }
+        return (
+          <span>
+            {new Date(entrega.data_entrega_kit).toLocaleDateString('pt-BR')}{' '}
+            <span className="text-xs text-muted-foreground">por {entrega.registrado_por}</span>
+          </span>
+        );
+      },
+    }),
+  ]);
+}
 
-export default function EntregasDataTable({ entregas, filterValue, sorting, onSortingChange }) {
+const SEM_ORDEM = [];
+const nadaAFazer = () => {};
+
+export default function EntregasDataTable({ alunos, salvando, esgotado, aoMarcar, aoDesmarcar }) {
+  const colunas = useMemo(
+    () => criarColunas({ salvando, esgotado, aoMarcar, aoDesmarcar }),
+    [salvando, esgotado, aoMarcar, aoDesmarcar],
+  );
+
   return (
     <DataTable
-      columns={entregasColumns}
-      data={entregas}
+      columns={colunas}
+      data={alunos}
       pageSize={10}
-      filterValue={filterValue}
       filterColumn="aluno"
-      sorting={sorting}
-      onSortingChange={onSortingChange}
+      sorting={SEM_ORDEM}
+      onSortingChange={nadaAFazer}
+      manterPagina
     />
   );
 }

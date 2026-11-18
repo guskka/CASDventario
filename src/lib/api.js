@@ -288,6 +288,45 @@ export function desfazerEntrega(id) {
   return request(`/entregas-kit/${id}`, { method: "DELETE" });
 }
 
+// "Material" = um item de resumoEstoque(): { id_material, volume_material, ano_letivo_material }.
+function parametrosMaterial(material) {
+  const params = new URLSearchParams({
+    materialId: material.id_material,
+    ano: material.ano_letivo_material,
+  });
+  if (material.volume_material) {
+    params.set("volume", material.volume_material);
+  }
+  return params.toString();
+}
+
+// Tela de entregas: todos os alunos ativos, quem já recebeu o material e o saldo.
+export function situacaoEntregas(material) {
+  return request(`/entregas-kit/situacao?${parametrosMaterial(material)}`);
+}
+
+// Entrega 1 unidade do material a cada aluno (um só, ou vários do mesmo curso).
+// Ou entrega para todos, ou para ninguém. A resposta traz "entregas" com os ids.
+export function entregarMaterial(material, alunosRm) {
+  return request("/entregas-kit/lote", {
+    method: "POST",
+    body: JSON.stringify({
+      materialId: material.id_material,
+      volume: material.volume_material ?? null,
+      anoLetivo: material.ano_letivo_material,
+      alunosRm,
+    }),
+  });
+}
+
+// Desfaz várias entregas de uma vez (o "Desfazer" depois de marcar vários).
+export function desfazerEntregas(ids) {
+  return request("/entregas-kit/desfazer", {
+    method: "POST",
+    body: JSON.stringify({ ids }),
+  });
+}
+
 // ============================================================
 //  EMPRÉSTIMOS DE NOTEBOOK
 // ============================================================

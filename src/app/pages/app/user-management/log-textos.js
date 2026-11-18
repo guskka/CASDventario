@@ -66,6 +66,8 @@ const CAMPOS = {
   fk_rm_aluno: 'Aluno (RM)',
   fk_id_usuario: 'Registrado por (ID)',
   qtd_entregue: 'Quantidade entregue',
+  quantidade: 'Quantidade',
+  alunos_resumo: 'Alunos',
   notebook: 'Notebook',
   aluno: 'Aluno',
   material: 'Material',

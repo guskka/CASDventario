@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ArrowCounterClockwiseIcon } from '@phosphor-icons/react';
 
 import {
   Dialog,
@@ -9,37 +8,34 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
 import { desfazerEntrega } from '@/lib/api';
 import { avisar, ENTREGAS_ALTERADAS } from '@/lib/eventos';
 
-// Desfaz uma entrega registrada por engano: a quantidade volta para o estoque.
-export default function DesfazerEntregaDialog({ entrega }) {
-  const [aberta, setAberta] = useState(false);
+// Confirmação ao DESMARCAR um aluno na lista de entregas: apaga a entrega e a
+// unidade volta para o estoque. Abre sozinha quando "aluno" não é null.
+export default function DesfazerEntregaDialog({ aluno, nomeMaterial, onFechar }) {
   const [erro, setErro] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  function abrirOuFechar(abrir) {
-    if (abrir) {
-      setErro('');
-    }
-    setAberta(abrir);
+  function fechar() {
+    setErro('');
+    onFechar();
   }
 
   async function desfazer() {
     setErro('');
     setEnviando(true);
     try {
-      await desfazerEntrega(entrega.id_entrega_kit);
+      await desfazerEntrega(aluno.entrega.id_entrega_kit);
       toast.add({
         type: 'success',
-        description: `Entrega desfeita: ${entrega.qtd_entregue} voltaram para o estoque.`,
+        description: `Entrega desfeita: 1 unidade de ${nomeMaterial} voltou para o estoque.`,
       });
       avisar(ENTREGAS_ALTERADAS);
-      setAberta(false);
+      fechar();
     } catch (err) {
       setErro(err.message);
     } finally {
@@ -48,32 +44,21 @@ export default function DesfazerEntregaDialog({ entrega }) {
   }
 
   return (
-    <Dialog open={aberta} onOpenChange={abrirOuFechar}>
-      <DialogTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-destructive"
-            aria-label={`Desfazer entrega nº ${entrega.id_entrega_kit}`}
-          />
-        }
-      >
-        <ArrowCounterClockwiseIcon />
-      </DialogTrigger>
+    <Dialog open={Boolean(aluno)} onOpenChange={(abrir) => !abrir && fechar()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Desfazer entrega?</DialogTitle>
+          <DialogTitle>Desfazer a entrega?</DialogTitle>
           <DialogDescription>
-            A entrega de {entrega.descricao} será apagada e {entrega.qtd_entregue} voltará(ão) para
-            o estoque. Use isto só para corrigir uma entrega registrada por engano.
+            <strong className="text-foreground">{aluno?.nome_completo}</strong> volta para
+            Pendentes e 1 unidade de <strong className="text-foreground">{nomeMaterial}</strong>{' '}
+            volta para o estoque.
           </DialogDescription>
         </DialogHeader>
         {erro && <p className="text-sm text-destructive">{erro}</p>}
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Cancelar</Button>} />
           <Button variant="destructive" onClick={desfazer} disabled={enviando}>
-            {enviando ? 'Desfazendo...' : 'Sim, desfazer'}
+            {enviando ? 'Desfazendo...' : 'Desfazer entrega'}
           </Button>
         </DialogFooter>
       </DialogContent>

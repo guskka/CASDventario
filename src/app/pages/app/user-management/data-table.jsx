@@ -16,6 +16,8 @@ import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
 // filterColumn: id da coluna usada pela busca (padrão "name").
 // onRowClick (opcional): função chamada com os dados da linha clicada.
+// manterPagina (opcional): não volta para a página 1 quando os dados recarregam
+// (ex.: marcar um aluno na página 3 da tela de entregas).
 export function DataTable({
   columns,
   data,
@@ -25,6 +27,7 @@ export function DataTable({
   sorting,
   onSortingChange,
   onRowClick,
+  manterPagina = false,
 }) {
   const table = useTable({
     features,
@@ -34,6 +37,7 @@ export function DataTable({
     // maiúsculas). Fixar isso evita o aviso "filterFn ... is not registered"
     // que aparecia enquanto a tabela ainda estava vazia (carregando).
     defaultColumn: { filterFn: 'includesString' },
+    autoResetPageIndex: manterPagina ? false : undefined,
     initialState: {
       pagination: {
         pageSize: pageSize,
@@ -48,6 +52,15 @@ export function DataTable({
   React.useEffect(() => {
     table.getColumn(filterColumn)?.setFilterValue(filterValue);
   }, [filterValue, filterColumn, table]);
+
+  // Se a página atual deixou de existir (a lista diminuiu), vai para a última.
+  const totalPaginas = table.getPageCount();
+  const paginaAtual = table.state.pagination.pageIndex;
+  React.useEffect(() => {
+    if (totalPaginas > 0 && paginaAtual >= totalPaginas) {
+      table.setPageIndex(totalPaginas - 1);
+    }
+  }, [totalPaginas, paginaAtual, table]);
 
   return (
     <div className='flex flex-col gap-4'>
