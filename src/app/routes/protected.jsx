@@ -1,9 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { usuarioLogado } from '@/lib/api';
+import { sessaoValida, encerrarSessao } from '@/lib/api';
 
-// Só deixa abrir as páginas internas quem fez login.
-// Sem sessão, manda para a tela de login.
+// Só deixa abrir as páginas internas quem fez login e ainda está com o
+// token dentro da validade. Senão, limpa a sessão e manda para o login.
 export function AppProtectedRoutes() {
-  const usuario = usuarioLogado();
-  return usuario ? <Outlet /> : <Navigate to="/signin" replace />;
+  if (!sessaoValida()) {
+    encerrarSessao();
+    return <Navigate to="/signin" replace />;
+  }
+
+  return <Outlet />;
 }

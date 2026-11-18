@@ -4,13 +4,31 @@ const API_URL = "http://127.0.0.1:3333";
 // Função genérica que todas as chamadas usam por baixo dos panos.
 // Ela já lida com JSON e com erros vindos da API.
 async function request(caminho, opcoes = {}) {
-  const resposta = await fetch(`${API_URL}${caminho}`, {
-    headers: { "Content-Type": "application/json" },
-    ...opcoes,
-  });
+  const headers = { ...opcoes.headers };
+
+  // Só avisa que está mandando JSON quando realmente há um corpo
+  // (a API recusa DELETE/GET com "Content-Type: application/json" e corpo vazio).
+  if (opcoes.body !== undefined) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  // Envia o token recebido no login: sem ele, a API recusa a requisição.
+  const token = usuarioLogado()?.token;
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const resposta = await fetch(`${API_URL}${caminho}`, { ...opcoes, headers });
 
   // Respostas 204 (delete, por exemplo) não têm corpo — não dá pra chamar .json() nelas.
   const dados = resposta.status !== 204 ? await resposta.json() : null;
+
+  // Token vencido ou conta desativada: encerra a sessão e volta ao login.
+  // (No próprio /login, 401 significa só "email ou senha inválidos".)
+  if (resposta.status === 401 && caminho !== "/login") {
+    encerrarSessao();
+    window.location.assign("/signin");
+  }
 
   if (!resposta.ok) {
     // Lança um erro com a mensagem que a API mandou (ex: "Email ou senha inválidos.")
@@ -47,6 +65,23 @@ export function usuarioLogado() {
     return bruto ? JSON.parse(bruto) : null;
   } catch {
     return null;
+  }
+}
+
+// true se existe um login com token ainda dentro da validade (8h).
+// Lê a data de expiração que vem dentro do próprio token (campo "exp").
+export function sessaoValida() {
+  const token = usuarioLogado()?.token;
+  if (typeof token !== 'string') {
+    return false;
+  }
+
+  try {
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const { exp } = JSON.parse(atob(base64));
+    return typeof exp === 'number' && exp * 1000 > Date.now();
+  } catch {
+    return false;
   }
 }
 
