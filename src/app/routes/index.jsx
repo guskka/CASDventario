@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { AppProtectedRoutes, ApenasMestre, PaginaInicial } from './protected';
+import { AppProtectedRoutes, ApenasMestre } from './protected';
 import SignIn from '../pages/auth/sign-in';
 import ForgotPassword from '../pages/auth/forgotpassword';
 import DefinirSenha from '../pages/auth/definir-senha';
@@ -13,6 +13,7 @@ import RemessasPage from '../pages/app/remessas';
 import EstoquePage from '../pages/app/estoque';
 import EntregasPage from '../pages/app/entregas';
 import EmprestimosPage from '../pages/app/emprestimos';
+import DashboardPage from '../pages/app/dashboard';
 
 export function AppRoutes() {
   return (
@@ -26,7 +27,9 @@ export function AppRoutes() {
         {/* Link do email (convite ou "esqueci minha senha"): /definir-senha?token=... */}
         <Route path="/definir-senha" element={<DefinirSenha />} />
         <Route element={<AppProtectedRoutes />}>
-          <Route path="/" element={<PaginaInicial />} />
+          {/* Página inicial depois do login (para Básico e Mestre) */}
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
           <Route element={<ApenasMestre />}>
             <Route path="/usermanagement" element={<AdmUserManagement />} />
           </Route>

@@ -17,9 +17,3 @@ export function AppProtectedRoutes() {
 export function ApenasMestre() {
   return usuarioEhMestre() ? <Outlet /> : <Navigate to="/" replace />;
 }
-
-// Página inicial depois do login. Enquanto o Dashboard (item 14 do PLAN.md)
-// não existe: Mestre vai para Administradores, os demais para o Perfil.
-export function PaginaInicial() {
-  return <Navigate to={usuarioEhMestre() ? '/usermanagement' : '/profile'} replace />;
-}

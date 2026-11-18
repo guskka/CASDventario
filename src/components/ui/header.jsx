@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { BellIcon, UserIcon, GearIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
+import { UserIcon, GearIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
 import { usuarioLogado, encerrarSessao } from "@/lib/api";
+import SinoNotificacoes from "@/components/sino-notificacoes";
 
 import {
   DropdownMenu,
@@ -46,25 +47,8 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
         <h2 className="font-semibold text-xl">{headerTitle}</h2>
       </div>
       <div className="flex items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" size="icon">
-              <BellIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <p>notificação1</p>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <p>notificação1</p>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Notificações: empréstimos atrasados */}
+        <SinoNotificacoes />
 
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -97,10 +81,14 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <GearIcon />
-                Configurações
-              </DropdownMenuItem>
+              {/* Por enquanto, Configurações abre a Aparência (D11). A tela completa de
+                  Configurações está em "Depois do principal" no PLAN.md. */}
+              <Link to={"/appearence"}>
+                <DropdownMenuItem>
+                  <GearIcon />
+                  Configurações
+                </DropdownMenuItem>
+              </Link>
               <Link to={"/appearence"}>
                 <DropdownMenuItem>
                   <PaintBrushIcon />

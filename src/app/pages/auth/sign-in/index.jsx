@@ -32,7 +32,7 @@ export default function SignIn() {
       // O token é enviado automaticamente em toda chamada à API (ver lib/api.js).
       sessionStorage.setItem('usuario', JSON.stringify(usuario));
 
-      navigate('/'); // a página inicial decide para onde ir (ver PaginaInicial em routes/protected.jsx)
+      navigate('/'); // página inicial: o Dashboard
     } catch (err) {
       setErro(err.message);
     } finally {

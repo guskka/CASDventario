@@ -188,6 +188,16 @@ export function deletarAluno(rm) {
 }
 
 // ============================================================
+//  DASHBOARD (página inicial)
+// ============================================================
+
+// Resumo: estoque, notebooks, empréstimos atrasados e vencendo, alunos ativos
+// e as últimas entregas.
+export function resumoDashboard() {
+  return request("/dashboard");
+}
+
+// ============================================================
 //  TIPOS DE MATERIAL, REMESSAS E ESTOQUE
 // ============================================================
 

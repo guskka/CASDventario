@@ -99,7 +99,7 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <NavLink to={"/dashboard"}>
+            <NavLink to={"/"}>
               <SidebarMenuButton
                 size="lg"
                 className="data-[slot=sidebar-menu-button]:p-0.5! hover:bg-transparent"

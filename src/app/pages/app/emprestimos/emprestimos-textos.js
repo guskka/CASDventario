@@ -73,6 +73,24 @@ export function hojeMaisDias(dias) {
 
 export const PRAZO_PADRAO_DIAS = 30;
 
+// Dias de hoje até a data de devolução (negativo = atrasado).
+// previsao chega como "AAAA-MM-DDT00:00:00.000Z" (data sem hora, em UTC).
+export function diasParaDevolver(previsao) {
+  const hoje = Date.parse(hojeMaisDias(0));
+  return Math.round((Date.parse(String(previsao).slice(0, 10)) - hoje) / 86400000);
+}
+
+// "atrasado há 5 dias", "vence hoje", "vence em 3 dias"
+export function textoPrazo(dias) {
+  if (dias < 0) {
+    return `atrasado há ${-dias} dia${dias === -1 ? '' : 's'}`;
+  }
+  if (dias === 0) {
+    return 'vence hoje';
+  }
+  return `vence em ${dias} dia${dias === 1 ? '' : 's'}`;
+}
+
 // Mesma regra do backend (decisão D7): estes estados contam como dano e mandam
 // o notebook para manutenção na devolução.
 const ESTADOS_COM_DANO = ['DANIFICADO', 'ALGUMAS_DANIFICADAS', 'NENHUMA_FUNCIONA'];
