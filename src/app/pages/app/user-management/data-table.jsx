@@ -16,6 +16,7 @@ import { features } from './data-table-features';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
 // filterColumn: id da coluna usada pela busca (padrão "name").
+// onRowClick (opcional): função chamada com os dados da linha clicada.
 export function DataTable({
   columns,
   data,
@@ -24,6 +25,7 @@ export function DataTable({
   filterColumn = 'name',
   sorting,
   onSortingChange,
+  onRowClick,
 }) {
   const table = useTable({
     features,
@@ -74,6 +76,8 @@ export function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={onRowClick ? 'cursor-pointer' : undefined}
+                  onClick={onRowClick ? () => onRowClick(row.original) : undefined}
                 >
                   {row.getVisibleCells().map((cell) => {
                     const customClass =

@@ -1,18 +1,14 @@
 import { createColumnHelper } from '@tanstack/react-table';
+import { EyeIcon } from '@phosphor-icons/react';
 
 import { DataTable } from './data-table';
 import { Badge } from '@/components/ui/badge';
+import { ACOES } from './log-textos';
 
 // Colunas da aba "Logs" (histórico de alterações), no mesmo modelo de columns.jsx.
+// Clicar numa linha abre a janela de detalhes (components/log-detalhes-dialog.jsx).
 
 const columnHelper = createColumnHelper();
-
-const ACOES = {
-  CRIOU: { label: 'Criou', variant: 'default' },
-  EDITOU: { label: 'Editou', variant: 'secondary' },
-  EXCLUIU: { label: 'Excluiu', variant: 'destructive' },
-  REENVIOU_CONVITE: { label: 'Reenviou convite', variant: 'outline' },
-};
 
 const logsColumns = columnHelper.columns([
   columnHelper.accessor('criado_em', {
@@ -46,15 +42,24 @@ const logsColumns = columnHelper.columns([
     },
   }),
 
-  // A busca procura aqui: junta quem fez + a descrição.
+  // Mensagem curta; os detalhes completos ficam na janela. A busca procura
+  // aqui (quem fez + descrição).
   columnHelper.accessor((log) => `${log.nome_usuario} ${log.descricao}`, {
     id: 'resumo',
     header: 'O que aconteceu',
-    cell: ({ row }) => <span title={row.original.descricao}>{row.original.descricao}</span>,
+    cell: ({ row }) => row.original.descricao,
+  }),
+
+  columnHelper.display({
+    id: 'ver',
+    meta: { className: 'w-12' },
+    cell: () => (
+      <EyeIcon className="text-muted-foreground" aria-label="Ver detalhes" />
+    ),
   }),
 ]);
 
-export default function LogsDataTable({ logs, filterValue, sorting, onSortingChange }) {
+export default function LogsDataTable({ logs, filterValue, sorting, onSortingChange, onRowClick }) {
   return (
     <DataTable
       columns={logsColumns}
@@ -64,6 +69,7 @@ export default function LogsDataTable({ logs, filterValue, sorting, onSortingCha
       filterColumn="resumo"
       sorting={sorting}
       onSortingChange={onSortingChange}
+      onRowClick={onRowClick}
     />
   );
 }

@@ -15,6 +15,7 @@ import {
 
 import BotaoDirecaoOrdem from '@/components/botao-direcao-ordem';
 import LogsDataTable from '../logs-columns';
+import LogDetalhesDialog from './log-detalhes-dialog';
 import { listarLogs } from '@/lib/api';
 import { USUARIOS_ALTERADOS } from '@/lib/eventos';
 
@@ -34,6 +35,7 @@ export default function LogsSection() {
   const [logs, setLogs] = useState([]);
   const [sorted, setSorted] = useState([{ id: 'criado_em', desc: true }]);
   const [erro, setErro] = useState('');
+  const [logAberto, setLogAberto] = useState(null); // linha clicada (janela de detalhes)
 
   const handleOrderByChange = (columnId) => {
     const opcao = ORDER_BY.find((item) => item.value === columnId);
@@ -104,13 +106,18 @@ export default function LogsSection() {
             Não foi possível carregar o histórico: {erro}
           </p>
         )}
+        <p className="mb-2 text-sm text-muted-foreground">
+          Clique numa linha para ver todos os detalhes.
+        </p>
         <LogsDataTable
           logs={logs}
           filterValue={busca}
           sorting={sorted}
           onSortingChange={setSorted}
+          onRowClick={setLogAberto}
         />
       </div>
+      <LogDetalhesDialog log={logAberto} onFechar={() => setLogAberto(null)} />
     </div>
   );
 }
