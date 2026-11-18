@@ -22,6 +22,7 @@ import {
   GearIcon,
 } from "@phosphor-icons/react";
 import LogoBlue from "../assets/brand/casdventario-blue-logo.svg";
+import { usuarioEhMestre } from "@/lib/api";
 
 const data = {
   navMain: [
@@ -34,6 +35,7 @@ const data = {
       title: "Administradores",
       url: "/usermanagement",
       icon: UserGearIcon,
+      apenasMestre: true,
     },
     {
       title: "Alunos",
@@ -76,6 +78,10 @@ const data = {
 };
 
 export function AppSidebar() {
+  // Itens marcados com apenasMestre só aparecem para Administrador Mestre.
+  const mestre = usuarioEhMestre();
+  const itensMenu = data.navMain.filter((item) => !item.apenasMestre || mestre);
+
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader>
@@ -94,7 +100,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={itensMenu} />
       </SidebarContent>
     </Sidebar>
   );

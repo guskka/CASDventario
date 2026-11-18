@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { AppProtectedRoutes } from './protected';
+import { AppProtectedRoutes, ApenasMestre, PaginaInicial } from './protected';
 import SignIn from '../pages/auth/sign-in';
 import ForgotPassword from '../pages/auth/forgotpassword';
 import AdmUserManagement from '../pages/app/user-management';
@@ -17,8 +17,10 @@ export function AppRoutes() {
         <Route path="/signup" element={<Navigate to="/signin" replace />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route element={<AppProtectedRoutes />}>
-          <Route path="/" element={<AdmUserManagement />} />
-          <Route path="/usermanagement" element={<AdmUserManagement />} />
+          <Route path="/" element={<PaginaInicial />} />
+          <Route element={<ApenasMestre />}>
+            <Route path="/usermanagement" element={<AdmUserManagement />} />
+          </Route>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/appearence" element={<AppearancePage />} />
         </Route>

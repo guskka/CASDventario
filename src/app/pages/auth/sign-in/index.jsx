@@ -28,11 +28,11 @@ export default function SignIn() {
     try {
       const usuario = await login(email, senha);
 
-      // Login OK. Ainda não temos token (JWT), então isso não é uma sessão
-      // segura de verdade — serve só pra testar o fluxo por enquanto.
+      // Login OK: guarda os dados do usuário e o token (JWT) desta aba.
+      // O token é enviado automaticamente em toda chamada à API (ver lib/api.js).
       sessionStorage.setItem('usuario', JSON.stringify(usuario));
 
-      navigate('/usermanagement'); // troque pelo caminho real da tela principal, se for outro
+      navigate('/'); // a página inicial decide para onde ir (ver PaginaInicial em routes/protected.jsx)
     } catch (err) {
       setErro(err.message);
     } finally {

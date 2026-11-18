@@ -50,6 +50,27 @@ export function login(email, senha) {
   });
 }
 
+// ============================================================
+//  USUÁRIOS (administradores)
+// ============================================================
+
+export function listarUsuarios(nome) {
+  const query = nome ? `?nome=${encodeURIComponent(nome)}` : "";
+  return request(`/usuarios${query}`);
+}
+
+export function buscarUsuario(id) {
+  return request(`/usuarios/${id}`);
+}
+
+// dados: { nome, apelido, email, status, tipo, senha } — envie só o que mudou.
+export function atualizarUsuario(id, dados) {
+  return request(`/usuarios/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+}
+
 export function cadastrarUsuario({ nome, email, senha, apelido, status, tipo }) {
   return request("/usuarios", {
     method: "POST",
@@ -82,6 +103,20 @@ export function sessaoValida() {
     return typeof exp === 'number' && exp * 1000 > Date.now();
   } catch {
     return false;
+  }
+}
+
+// true se quem está logado é Administrador Mestre.
+export function usuarioEhMestre() {
+  return usuarioLogado()?.tipo === 'MESTRE';
+}
+
+// Atualiza os dados guardados da sessão (ex: depois de editar o próprio nome),
+// mantendo o token.
+export function atualizarSessao(dados) {
+  const atual = usuarioLogado();
+  if (atual) {
+    sessionStorage.setItem('usuario', JSON.stringify({ ...atual, ...dados }));
   }
 }
 

@@ -14,15 +14,22 @@ import {
 } from "@/components/ui/select";
 
 import UsersDataTable from "../app/pages/app/user-management/columns";
+import { listarUsuarios } from "@/lib/api";
+import { USUARIOS_ALTERADOS } from "@/lib/eventos";
 
+// Busca os administradores na API e converte os nomes dos campos do banco
+// para os nomes usados pelas colunas da tabela.
 async function fetchUsers() {
-  const response = await fetch("http://localhost:4000/users");
+  const usuarios = await listarUsuarios();
 
-  if (!response.ok) {
-    throw new Error(`Erro ao buscar usuários: ${response.status}`);
-  }
-
-  return response.json();
+  return usuarios.map((u) => ({
+    id: u.id_usuario,
+    name: u.nome_completo,
+    username: u.apelido ?? "",
+    email: u.email,
+    status: u.status,
+    role: u.tipo,
+  }));
 }
 
 export default function TableSection({ title }) {
@@ -45,14 +52,25 @@ export default function TableSection({ title }) {
     getSorted([{ id: columnId, desc: sorted[0]?.desc }]);
   };
 
+  const [erro, setErro] = useState("");
+
   useEffect(() => {
-    fetchUsers()
-      .then((data) => {
-        setUsers(data);
-      })
-      .catch((error) => {
-        console.error("Erro ao carregar administradores:", error);
-      });
+    function carregar() {
+      fetchUsers()
+        .then((data) => {
+          setUsers(data);
+          setErro("");
+        })
+        .catch((error) => {
+          setErro(error.message);
+        });
+    }
+
+    carregar();
+
+    // Recarrega a lista quando um administrador é editado ou cadastrado.
+    window.addEventListener(USUARIOS_ALTERADOS, carregar);
+    return () => window.removeEventListener(USUARIOS_ALTERADOS, carregar);
   }, []);
 
   return (
@@ -102,6 +120,11 @@ export default function TableSection({ title }) {
       </div>
 
       <div className="p-4 w-full transition-all ease-in-out">
+        {erro && (
+          <p className="mb-4 text-sm text-destructive">
+            Não foi possível carregar os administradores: {erro}
+          </p>
+        )}
         <UsersDataTable
           users={users}
           filterValue={globalFilter}
