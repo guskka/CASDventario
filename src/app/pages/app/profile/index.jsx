@@ -15,32 +15,69 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { toast } from "@/components/ui/toast";
+import { atualizarSessao, atualizarUsuario, buscarUsuario, usuarioLogado } from "@/lib/api";
+import TrocarSenhaDialog from "./trocar-senha-dialog";
+import DesativarContaDialog from "./desativar-conta-dialog";
+
+// Data do banco -> "dd/mm/aaaa" (ou "—" enquanto carrega).
+function formatarData(valor) {
+  return valor ? new Date(valor).toLocaleDateString("pt-BR") : "—";
+}
 
 export default function ProfilePage() {
-  const [user, setUser] = useState("Adminstrador");
-  const [username, setUsername] = useState("Adm");
-  const password = "12345678Aa";
-  const email = "adm@example.com";
+  const idUsuario = usuarioLogado()?.id_usuario;
+
+  // Dados da conta como estão no banco + o que está sendo digitado.
+  const [conta, setConta] = useState(null);
+  const [user, setUser] = useState("");
+  const [username, setUsername] = useState("");
+  const [erro, setErro] = useState("");
+  const [salvando, setSalvando] = useState(false);
+
   const roles = [
     { label: "Administrador Básico", value: "BASICO" },
     { label: "Administrador Mestre", value: "MESTRE" },
   ];
-  const createdAccountDate = new Date().toLocaleDateString();
-  const modifiedAccountDate = new Date().toLocaleDateString();
 
-  const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(user)}`;
+  useEffect(() => {
+    buscarUsuario(idUsuario)
+      .then((dados) => {
+        setConta(dados);
+        setUser(dados.nome_completo);
+        setUsername(dados.apelido ?? "");
+      })
+      .catch((err) => setErro(err.message));
+  }, [idUsuario]);
+
+  const mudou =
+    conta !== null &&
+    (user.trim() !== conta.nome_completo || username.trim() !== (conta.apelido ?? ""));
+
+  async function salvarPerfil(event) {
+    event.preventDefault();
+    setErro("");
+    setSalvando(true);
+
+    try {
+      const atualizado = await atualizarUsuario(idUsuario, {
+        nome: user.trim(),
+        apelido: username.trim() || null,
+      });
+      setConta(atualizado);
+      // O cabeçalho lê o nome da sessão: atualiza para mostrar o nome novo.
+      atualizarSessao({ nome_completo: atualizado.nome_completo, apelido: atualizado.apelido });
+      toast.add({ type: "success", description: "Perfil atualizado com sucesso." });
+    } catch (err) {
+      setErro(err.message);
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(conta?.nome_completo ?? "")}`;
 
   const fileInputRef = useRef(null);
   const [preview, setPreview] = useState(null);
@@ -59,7 +96,7 @@ export default function ProfilePage() {
       <div className="flex w-full font-geist">
         <AppSidebar />
         <div className="flex flex-1 flex-col min-w-0 w-full h-full">
-          <Header headerTitle={"Perfil"} AccountName={user} AccountPosition={roles[0].label} />
+          <Header headerTitle={"Perfil"} />
           <main className="flex-1 p-6">
             <div className="space-y-6">
               <div className="flex flex-col">
@@ -67,26 +104,29 @@ export default function ProfilePage() {
                 <p className="text-sm line text-muted-foreground">
                   Altere da forma como quiser a sua conta. Alguns campos não podem ser alterados.
                 </p>
+                {erro && <p className="mt-2 text-sm text-destructive">{erro}</p>}
               </div>
-              <form className="flex gap-12">
+              <form className="flex gap-12" onSubmit={salvarPerfil}>
                 <FieldGroup>
                   <Field>
                     <FieldLabel htmlFor="name">Nome</FieldLabel>
                     <Input
                       id="name"
-                      defaultValue={user}
+                      value={user}
                       onValueChange={setUser}
                       autoComplete="off"
                       required
+                      disabled={!conta}
                     />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="username">Apelido</FieldLabel>
                     <Input
                       id="username"
-                      defaultValue={username}
+                      value={username}
                       onValueChange={setUsername}
                       autoComplete="off"
+                      disabled={!conta}
                     />
                     <FieldDescription>
                       O apelido serve apenas como forma de identificação rápida e usual para busca
@@ -96,31 +136,32 @@ export default function ProfilePage() {
                   <Field>
                     <FieldLabel htmlFor="password">Senha</FieldLabel>
                     <div className="flex gap-2">
+                      {/* A senha nunca é mostrada: só os pontinhos de exemplo. */}
                       <Input
                         id="password"
-                        defaultValue={password}
+                        value="••••••••"
                         autoComplete="off"
                         type="password"
                         disabled
+                        readOnly
                       />
-                      <Button id="password" variant="secondary">
-                        Mudar senha
-                      </Button>
+                      <TrocarSenhaDialog idUsuario={idUsuario} />
                     </div>
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
                       id="email"
-                      defaultValue={email}
+                      value={conta?.email ?? ""}
                       autoComplete="off"
                       type="email"
                       disabled
+                      readOnly
                     />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="role">Cargo</FieldLabel>
-                    <Select id="role" items={roles} defaultValue="BASICO" disabled>
+                    <Select id="role" items={roles} value={conta?.tipo ?? null} disabled>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -137,20 +178,22 @@ export default function ProfilePage() {
                   </Field>
                   <Field orientation="horizontal">
                     <FieldLabel>Conta criada em:</FieldLabel>
-                    <p>{createdAccountDate}</p>
+                    <p>{formatarData(conta?.data_cadastro)}</p>
                   </Field>
                   <Field orientation="horizontal">
                     <FieldLabel>Última atualização em:</FieldLabel>
-                    <p>{modifiedAccountDate}</p>
+                    <p>{formatarData(conta?.atualizado_em)}</p>
                   </Field>
                   <Field orientation="horizontal">
-                    <Button>Salvar alterações</Button>
+                    <Button type="submit" disabled={!mudou || salvando}>
+                      {salvando ? "Salvando..." : "Salvar alterações"}
+                    </Button>
                   </Field>
                 </FieldGroup>
                 <div className="relative inline-block mx-16">
                   <Avatar className="w-56 h-56">
-                    <AvatarImage src={preview || avatarUrl} alt={email} />
-                    <AvatarFallback>{user}</AvatarFallback>
+                    <AvatarImage src={preview || avatarUrl} alt={conta?.email ?? "Avatar"} />
+                    <AvatarFallback>{conta?.nome_completo}</AvatarFallback>
                   </Avatar>
 
                   <input
@@ -177,27 +220,12 @@ export default function ProfilePage() {
                 <h3 className="font-semibold text-xl text-destructive">Desativar conta</h3>
                 <p className="text-sm line text-muted-foreground">
                   Ao desativar sua conta, você perderá o acesso ao sistema. Caso mude de ideia,
-                  solicite a reativaçẽo a um adiministrador.
+                  solicite a reativação a um Administrador Mestre.
                 </p>
               </div>
-              <Dialog>
-                <DialogTrigger
-                  render={<Button variant="destructive">Desativar minha conta</Button>}
-                />
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Deseja realmente desativar sua conta?</DialogTitle>
-                    <DialogDescription>
-                      Esta ação encerrará sua sessão atual e bloqueará seu acesso ao sistema até que
-                      um administrador realize a reativação.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogClose render={<Button variant="outline">Cancelar</Button>} />
-                    <Button variant="destructive">Sim, desativar conta</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <div>
+                <DesativarContaDialog idUsuario={idUsuario} />
+              </div>
             </div>
           </main>
         </div>
