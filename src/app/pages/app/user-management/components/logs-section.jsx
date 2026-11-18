@@ -13,6 +13,7 @@ import {
   SelectGroup,
 } from '@/components/ui/select';
 
+import BotaoDirecaoOrdem from '@/components/botao-direcao-ordem';
 import LogsDataTable from '../logs-columns';
 import { listarLogs } from '@/lib/api';
 import { USUARIOS_ALTERADOS } from '@/lib/eventos';
@@ -20,8 +21,10 @@ import { USUARIOS_ALTERADOS } from '@/lib/eventos';
 // Aba "Logs": histórico de quem criou, editou ou excluiu o quê e quando.
 // Mesmo modelo da lista de administradores (components/table-section.jsx).
 
+// desc = ordem inicial ao escolher a opção (Data começa pelos mais recentes).
+// O botão ao lado inverte a ordem.
 const ORDER_BY = [
-  { label: 'Data (mais recentes)', value: 'criado_em', desc: true },
+  { label: 'Data', value: 'criado_em', desc: true },
   { label: 'Quem', value: 'nome_usuario', desc: false },
   { label: 'Ação', value: 'acao', desc: false },
 ];
@@ -38,6 +41,8 @@ export default function LogsSection() {
       setSorted([{ id: opcao.value, desc: opcao.desc }]);
     }
   };
+
+  const inverterOrdem = () => setSorted(([atual]) => [{ id: atual.id, desc: !atual.desc }]);
 
   useEffect(() => {
     function carregar() {
@@ -61,7 +66,7 @@ export default function LogsSection() {
       <div className="flex items-center justify-between rounded-t-md px-4 w-full h-16 bg-card">
         <h4 className="font-semibold text-lg">Logs</h4>
 
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           <Select items={ORDER_BY} value={sorted[0]?.id} onValueChange={handleOrderByChange}>
             <Tooltip>
               <TooltipTrigger render={<SelectTrigger />}>
@@ -79,7 +84,8 @@ export default function LogsSection() {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <InputGroup>
+          <BotaoDirecaoOrdem desc={sorted[0]?.desc} onToggle={inverterOrdem} />
+          <InputGroup className="ml-2">
             <InputGroupInput
               placeholder="Buscar no histórico..."
               value={busca}

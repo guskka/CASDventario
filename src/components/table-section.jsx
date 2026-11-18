@@ -13,6 +13,7 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 
+import BotaoDirecaoOrdem from "@/components/botao-direcao-ordem";
 import UsersDataTable from "../app/pages/app/user-management/columns";
 import { listarUsuarios } from "@/lib/api";
 import { USUARIOS_ALTERADOS } from "@/lib/eventos";
@@ -51,6 +52,9 @@ export default function TableSection({ title }) {
 
     getSorted([{ id: columnId, desc: sorted[0]?.desc }]);
   };
+
+  // Botão ao lado do "Ordenar por": inverte crescente <-> decrescente.
+  const inverterOrdem = () => getSorted(([atual]) => [{ id: atual.id, desc: !atual.desc }]);
 
   const [erro, setErro] = useState("");
 
@@ -102,6 +106,7 @@ export default function TableSection({ title }) {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <BotaoDirecaoOrdem desc={sorted[0]?.desc} onToggle={inverterOrdem} />
           </div>
           <div className="flex space-x-2 transition-all ease-in-out">
             <InputGroup>
