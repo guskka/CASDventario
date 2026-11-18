@@ -42,12 +42,14 @@ A ONG distribui **kits** e realiza o **empréstimo de notebooks** a alunos, e es
 
 ## ✨ Funcionalidades
 
-- 🔐 **Autenticação**: cadastro (*sign-up*) e login (*sign-in*) de usuários.
-- 👥 **Gerenciamento de usuários**: listagem em tabela com busca (rota `/usermanagement`).
+- 🔐 **Acesso seguro**: login com sessão de 8 horas, convite por email para novos administradores e "esqueci minha senha". Não há cadastro aberto: só um Administrador Mestre cria contas.
+- 📊 **Dashboard**: resumo do estoque, dos notebooks, dos empréstimos atrasados ou vencendo e das últimas entregas, com aviso de atrasos no sino do cabeçalho.
+- 👥 **Administradores** (só Mestre): cadastro, edição, ativação/desativação e o **histórico de alterações** (aba Logs), com o que mudou em cada registro.
+- 🙋 **Perfil**: nome, apelido, foto, troca de senha e desativação da própria conta.
 - 🎓 **Alunos**: cadastro dos alunos atendidos pela ONG.
-- 📦 **Remessas e estoque**: controle da entrada e do estoque de kits.
-- 🎁 **Entrega de kits** aos alunos.
-- 💻 **Notebooks**: cadastro, empréstimos e devoluções.
+- 📦 **Remessas e estoque**: entrada de materiais (kits Poliedro, apostilas...) e o saldo de cada um.
+- 🎁 **Entrega de kits** aos alunos, com baixa automática do estoque.
+- 💻 **Notebooks**: cadastro, empréstimos e devoluções com checklist do estado do aparelho.
 - 🌗 **Tema claro/escuro** (*theme switcher*).
 
 ## 🏗️ Arquitetura
@@ -127,6 +129,8 @@ npm run dev
 
 Acesse o endereço exibido no terminal (por padrão, `http://localhost:5173`).
 
+> O frontend procura a API em `http://127.0.0.1:3333`. Se o backend estiver em outro endereço, crie um arquivo `.env` nesta pasta com `VITE_API_URL=http://endereco:porta` e reinicie o `npm run dev`.
+
 **Ordem de inicialização:**
 
 ```text
@@ -135,11 +139,11 @@ XAMPP (MariaDB)  →  Backend (API)  →  Frontend (npm run dev)
 
 ## 🧭 Como o sistema funciona
 
-1. **Cadastro e login**: o usuário cria a conta na página de *sign-up* e entra pela página de *sign-in*. Após autenticar, a sessão fica guardada no `sessionStorage` e o usuário é redirecionado para `/usermanagement`.
-2. **Gerenciamento de usuários**: a página administrativa lista os usuários vindos da API em uma tabela com campo de busca.
-3. **Remessas e estoque**: as remessas recebidas alimentam o estoque de kits.
-4. **Entrega de kits**: ao registrar uma entrega para um aluno, o estoque é atualizado automaticamente pelo backend.
-5. **Empréstimo de notebooks**: ao emprestar um notebook, seu status muda; na devolução, o checklist de estado é registrado e o status é atualizado novamente.
+1. **Acesso**: um Administrador Mestre cadastra a pessoa, que recebe um email para criar a própria senha. Depois ela entra pela página de *sign-in*; a sessão (com o token de 8 horas) fica no `sessionStorage` e a pessoa cai no **Dashboard** (`/`).
+2. **Administradores**: o Mestre lista, edita e desativa contas e acompanha o histórico de alterações. Administradores Básicos não veem essa tela.
+3. **Remessas e estoque**: cada remessa registra os materiais que chegaram e as quantidades, que somam no estoque.
+4. **Entrega de kits**: ao registrar uma entrega para um aluno, o backend desconta do estoque (e recusa se não houver saldo).
+5. **Empréstimo de notebooks**: o empréstimo registra o checklist de saída e o notebook passa a "emprestado". Na devolução, o checklist de volta é registrado e o notebook volta a ficar disponível, ou vai para manutenção se voltou com dano.
 
 ## 🗂️ Estrutura de pastas
 
@@ -169,6 +173,8 @@ CASDventario/
 |---|---|
 | `npm run dev` | Inicia o servidor de desenvolvimento (Vite) |
 | `npm run build` | Gera a build de produção |
+| `npm run preview` | Abre a build de produção localmente, para conferir |
+| `npm run lint` | Verifica o código com o ESLint |
 
 ## 📦 Implantação
 
@@ -178,7 +184,7 @@ Para gerar a versão de produção do frontend:
 npm run build
 ```
 
-Os arquivos estáticos otimizados são gerados na pasta `dist/` e podem ser publicados em qualquer servidor web. Em produção, o frontend precisa conseguir acessar a API do `CASDventario-Backend`, que por sua vez depende do banco de dados MariaDB em execução.
+Os arquivos estáticos otimizados são gerados na pasta `dist/` e podem ser publicados em qualquer servidor web. O endereço da API entra na build: se ela não estiver em `http://127.0.0.1:3333`, defina `VITE_API_URL` **antes** de rodar o `npm run build`. Em produção, o frontend precisa conseguir acessar a API do `CASDventario-Backend`, que por sua vez depende do banco de dados MariaDB em execução.
 
 ## 🛠️ Construído com
 
