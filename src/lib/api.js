@@ -50,6 +50,23 @@ export function login(email, senha) {
   });
 }
 
+// "Esqueci minha senha": a API manda um link por email (resposta sempre igual,
+// exista o email ou não).
+export function esqueciSenha(email) {
+  return request("/auth/esqueci-senha", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
+// Cria a senha pelo link do email (convite ou "esqueci minha senha").
+export function definirSenha(token, senha) {
+  return request("/auth/definir-senha", {
+    method: "POST",
+    body: JSON.stringify({ token, senha }),
+  });
+}
+
 // ============================================================
 //  USUÁRIOS (administradores)
 // ============================================================
@@ -71,11 +88,19 @@ export function atualizarUsuario(id, dados) {
   });
 }
 
-export function cadastrarUsuario({ nome, email, senha, apelido, status, tipo }) {
+// Cadastra um administrador (só Mestre). A conta nasce PENDENTE e a pessoa
+// recebe um email para criar a própria senha. A resposta traz
+// convite: { enviado, modoDesenvolvimento, erroEmail }.
+export function cadastrarUsuario({ nome, email, apelido, tipo }) {
   return request("/usuarios", {
     method: "POST",
-    body: JSON.stringify({ nome, email, senha, apelido, status, tipo }),
+    body: JSON.stringify({ nome, email, apelido, tipo }),
   });
+}
+
+// Reenvia o convite de uma conta PENDENTE (o link anterior deixa de valer).
+export function reenviarConvite(id) {
+  return request(`/usuarios/${id}/reenviar-convite`, { method: "POST" });
 }
 
 // Lê o usuário salvo no login. Retorna null se não houver ninguém logado

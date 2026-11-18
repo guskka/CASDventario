@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import LogoWhite from '../../../../assets/brand/casdventario-white-logo.svg';
 import LogotypeBlack from '../../../../assets/brand/casdventario-black-logotype.svg';
 import LogotypeWhite from '../../../../assets/brand/casdventario-white-logotype.svg';
@@ -5,8 +6,32 @@ import { Link } from 'react-router-dom';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
 import InputFloatingLabel from '../../../../components/ui/input-floating-label';
 import { Button } from '@/components/ui/button';
+import { esqueciSenha } from '@/lib/api';
 
 export default function ForgotPassword() {
+  const [email, setEmail] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [erro, setErro] = useState('');
+  const [enviando, setEnviando] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setErro('');
+    setMensagem('');
+    setEnviando(true);
+
+    try {
+      // A resposta é sempre a mesma, exista o email ou não (para não revelar
+      // quais emails estão cadastrados).
+      const resposta = await esqueciSenha(email.trim());
+      setMensagem(resposta.mensagem);
+    } catch (err) {
+      setErro(err.message);
+    } finally {
+      setEnviando(false);
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col font-geist">
       <div className="flex flex-1">
@@ -18,7 +43,7 @@ export default function ForgotPassword() {
           />
         </aside>
         <main className="flex flex-1 items-center justify-center">
-          <div className="flex flex-col w-full px-32 space-y-6">
+          <form onSubmit={handleSubmit} className="flex flex-col w-full px-32 space-y-6">
             <div className="flex flex-col space-y-3 items-center">
               <img
                 className="w-42 select-none dark:hidden"
@@ -38,16 +63,20 @@ export default function ForgotPassword() {
                 para poder lhe enviarmos um link de redefinição de senha.
               </p>
             </div>
+
+            {erro && <p className="text-center text-sm text-destructive">{erro}</p>}
+            {mensagem && <p className="text-center text-sm text-primary">{mensagem}</p>}
+
             <InputFloatingLabel
-              textFocus={'peer-focus:text-cyan-600'}
-              borderFocus={'focus:border-cyan-600'}
-              background={'bg-white'}
               text={'Email'}
               type={'email'}
               id={'email'}
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Button variant="default" className="py-5">
-              Enviar link de redefinição de senha
+            <Button type="submit" variant="default" className="py-5" disabled={enviando}>
+              {enviando ? 'Enviando...' : 'Enviar link de redefinição de senha'}
             </Button>
             <p className="py-2 rounded-md text-sm text-center text-secondary-foreground bg-secondary">
               <Link
@@ -58,7 +87,7 @@ export default function ForgotPassword() {
                 Voltar
               </Link>
             </p>
-          </div>
+          </form>
         </main>
       </div>
     </div>

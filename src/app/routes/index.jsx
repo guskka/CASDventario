@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProtectedRoutes, ApenasMestre, PaginaInicial } from './protected';
 import SignIn from '../pages/auth/sign-in';
 import ForgotPassword from '../pages/auth/forgotpassword';
+import DefinirSenha from '../pages/auth/definir-senha';
 import AdmUserManagement from '../pages/app/user-management';
 import AppearancePage from '../pages/app/appearance';
 import ProfilePage from '../pages/app/profile';
@@ -16,6 +17,8 @@ export function AppRoutes() {
             pela tela Administradores. O arquivo pages/auth/sign-up continua no projeto. */}
         <Route path="/signup" element={<Navigate to="/signin" replace />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        {/* Link do email (convite ou "esqueci minha senha"): /definir-senha?token=... */}
+        <Route path="/definir-senha" element={<DefinirSenha />} />
         <Route element={<AppProtectedRoutes />}>
           <Route path="/" element={<PaginaInicial />} />
           <Route element={<ApenasMestre />}>

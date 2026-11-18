@@ -25,13 +25,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cadastrarUsuario } from '@/lib/api';
-
-// Gera uma senha temporária simples. Numa versão futura, o ideal é enviar
-// um convite por email pro novo admin definir a própria senha — por
-// enquanto, isso resolve o cadastro sem travar no TCC.
-function gerarSenhaTemporaria() {
-  return `Temp${Math.floor(100000 + Math.random() * 900000)}!`;
-}
+import { avisar, USUARIOS_ALTERADOS } from '@/lib/eventos';
+import { avisarResultadoConvite } from './avisar-convite';
 
 export default function AddAdminDialog() {
   const ADM_ROLES = [
@@ -56,23 +51,25 @@ export default function AddAdminDialog() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErro('');
+
+    if (!cargo) {
+      setErro('Selecione um cargo.');
+      return;
+    }
+
     setEnviando(true);
 
     try {
-      const senhaTemporaria = gerarSenhaTemporaria();
-
-      await cadastrarUsuario({
-        nome_completo: nome,
-        email,
-        senha: senhaTemporaria,
-        // O banco espera "BASICO" ou "administrador" (tb_usuario_tipo_usuario).
-        // O banco aceita "BASICO" ou "MESTRE" (enum tb_usuario_tipo).
-        tipo: cargo,
+      // A conta nasce PENDENTE e a pessoa recebe um email para criar a
+      // própria senha: ninguém (nem o Mestre) fica sabendo a senha dela.
+      const novo = await cadastrarUsuario({
+        nome: nome.trim(),
+        email: email.trim(),
+        tipo: cargo, // "BASICO" ou "MESTRE" (enum tb_usuario_tipo)
       });
 
-      // TCC: mostra a senha temporária pra quem cadastrou repassar pro novo
-      // admin. Numa versão real, isso viraria um email automático.
-      alert(`Administrador criado! Senha temporária: ${senhaTemporaria}`);
+      avisarResultadoConvite(novo.convite, novo.email);
+      avisar(USUARIOS_ALTERADOS);
 
       limparFormulario();
       setOpenDialog(false);
@@ -99,7 +96,8 @@ export default function AddAdminDialog() {
         <DialogHeader>
           <DialogTitle>Adicionar Administrador</DialogTitle>
           <DialogDescription>
-            Preencha os campos para cadastro de um novo administrador.
+            Preencha os campos para cadastro de um novo administrador. Ele receberá um
+            email com um link para criar a própria senha.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>

@@ -23,8 +23,9 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/toast';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
-import { atualizarUsuario, usuarioLogado, atualizarSessao } from '@/lib/api';
+import { atualizarUsuario, usuarioLogado, atualizarSessao, reenviarConvite } from '@/lib/api';
 import { avisar, USUARIOS_ALTERADOS } from '@/lib/eventos';
+import { avisarResultadoConvite } from './avisar-convite';
 
 const ADM_ROLES = [
   { label: 'Administrador Básico', value: 'BASICO' },
@@ -46,6 +47,7 @@ export default function EditAdminDialog({ user }) {
   const [role, setRole] = useState(user.role);
   const [erro, setErro] = useState('');
   const [salvando, setSalvando] = useState(false);
+  const [reenviando, setReenviando] = useState(false);
 
   const pendente = user.status === 'PENDENTE';
   const opcoesStatus = pendente ? [...ADM_STATUS, STATUS_PENDENTE] : ADM_STATUS;
@@ -101,6 +103,20 @@ export default function EditAdminDialog({ user }) {
       setSalvando(false);
     }
   };
+
+  // Conta PENDENTE: manda um link novo para a pessoa criar a senha.
+  async function handleReenviarConvite() {
+    setErro('');
+    setReenviando(true);
+    try {
+      const { convite } = await reenviarConvite(user.id);
+      avisarResultadoConvite(convite, user.email);
+    } catch (err) {
+      setErro(err.message);
+    } finally {
+      setReenviando(false);
+    }
+  }
 
   return (
     <Dialog open={openDialog} onOpenChange={abrirOuFechar}>
@@ -161,6 +177,21 @@ export default function EditAdminDialog({ user }) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {pendente && (
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm text-muted-foreground">
+                    Esta pessoa ainda não criou a senha pelo email de convite.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleReenviarConvite}
+                    disabled={reenviando}
+                  >
+                    {reenviando ? 'Enviando...' : 'Reenviar convite'}
+                  </Button>
+                </div>
+              )}
             </Field>
             <Field>
               <Label htmlFor="role">Cargo</Label>
