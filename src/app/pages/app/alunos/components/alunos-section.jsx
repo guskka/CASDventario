@@ -3,17 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-  SelectGroup,
-} from '@/components/ui/select';
 
 import BotaoDirecaoOrdem from '@/components/botao-direcao-ordem';
+import FiltroSelect from '@/components/filtro-select';
 import AlunosDataTable from '../columns';
 import { listarAlunos } from '@/lib/api';
 import { ALUNOS_ALTERADOS } from '@/lib/eventos';
@@ -34,28 +26,6 @@ const TODOS = 'TODOS';
 const FILTRO_CURSO = [{ label: 'Todos os cursos', value: TODOS }, ...CURSOS];
 const FILTRO_TURMA = [{ label: 'Todas as turmas', value: TODOS }, ...TURMAS];
 const FILTRO_STATUS = [{ label: 'Todos os status', value: TODOS }, ...STATUS_ALUNO];
-
-function SelectSimples({ items, value, onValueChange, dica }) {
-  return (
-    <Select items={items} value={value} onValueChange={onValueChange}>
-      <Tooltip>
-        <TooltipTrigger render={<SelectTrigger />}>
-          <SelectValue />
-        </TooltipTrigger>
-        <TooltipContent side="bottom">{dica}</TooltipContent>
-      </Tooltip>
-      <SelectContent>
-        <SelectGroup>
-          {items.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
-}
 
 export default function AlunosSection() {
   const [alunos, setAlunos] = useState([]);
@@ -108,7 +78,7 @@ export default function AlunosSection() {
         <h4 className="font-semibold text-lg">Alunos</h4>
 
         <div className="flex gap-2">
-          <SelectSimples
+          <FiltroSelect
             items={ORDER_BY}
             value={sorted[0]?.id}
             onValueChange={handleOrderByChange}
@@ -131,9 +101,9 @@ export default function AlunosSection() {
       <div className="p-4 w-full space-y-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-muted-foreground">Filtrar:</span>
-          <SelectSimples items={FILTRO_CURSO} value={curso} onValueChange={setCurso} dica="Curso" />
-          <SelectSimples items={FILTRO_TURMA} value={turma} onValueChange={setTurma} dica="Turma" />
-          <SelectSimples
+          <FiltroSelect items={FILTRO_CURSO} value={curso} onValueChange={setCurso} dica="Curso" />
+          <FiltroSelect items={FILTRO_TURMA} value={turma} onValueChange={setTurma} dica="Turma" />
+          <FiltroSelect
             items={FILTRO_STATUS}
             value={status}
             onValueChange={setStatus}

@@ -3,6 +3,7 @@
 
 export const USUARIOS_ALTERADOS = 'usuarios-alterados';
 export const ALUNOS_ALTERADOS = 'alunos-alterados';
+export const NOTEBOOKS_ALTERADOS = 'notebooks-alterados';
 
 export function avisar(evento) {
   window.dispatchEvent(new Event(evento));

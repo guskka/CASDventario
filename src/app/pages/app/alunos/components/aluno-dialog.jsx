@@ -11,49 +11,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Field, FieldGroup } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import CampoSelect from '@/components/campo-select';
 import { toast } from '@/components/ui/toast';
 import { atualizarAluno, cadastrarAluno } from '@/lib/api';
 import { avisar, ALUNOS_ALTERADOS } from '@/lib/eventos';
 import { CURSOS, SEM_TURMA, STATUS_ALUNO, TURMAS } from '../alunos-textos';
 
 const RM_MAXIMO = 4294967295; // maior número aceito pela coluna rm_aluno (INT UNSIGNED)
-
-function CampoSelect({ id, label, obrigatorio, opcoes, valor, onChange, placeholder }) {
-  return (
-    <Field>
-      <Label htmlFor={id}>
-        {label}
-        {obrigatorio && <span className="text-destructive">*</span>}
-      </Label>
-      <Select id={id} items={opcoes} value={valor} onValueChange={onChange}>
-        <SelectTrigger>
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {opcoes.map((opcao) => (
-              <SelectItem key={opcao.value} value={opcao.value}>
-                {opcao.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </Field>
-  );
-}
 
 // Janela de cadastrar (sem "aluno") ou editar (com "aluno") um aluno.
 // Mesmo modelo das janelas da tela de Administradores.

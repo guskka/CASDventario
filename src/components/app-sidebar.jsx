@@ -54,7 +54,7 @@ const data = {
     },
     {
       title: "Notebooks",
-      url: "/",
+      url: "/notebooks",
       icon: LaptopIcon,
     },
   ],
