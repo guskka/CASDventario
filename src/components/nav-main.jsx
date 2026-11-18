@@ -22,15 +22,15 @@ export default function NavMain({ items }) {
 
           return (
             <SidebarMenuItem key={item.title}>
-              <NavLink to={item.url} className="block w-full">
-                <SidebarMenuButton
-                  tooltip={item.title}
-                  isActive={isActive}
-                >
-                  {item.icon && <item.icon weight={isActive ? 'bold' : 'regular'} />}
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </NavLink>
+              {/* render: o próprio item do menu vira o link (sem um botão dentro do link). */}
+              <SidebarMenuButton
+                render={<NavLink to={item.url} />}
+                tooltip={item.title}
+                isActive={isActive}
+              >
+                {item.icon && <item.icon weight={isActive ? 'bold' : 'regular'} />}
+                <span>{item.title}</span>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           );
         })}

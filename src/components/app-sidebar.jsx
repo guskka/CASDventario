@@ -93,15 +93,14 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <NavLink to={"/"}>
-              <SidebarMenuButton
-                size="lg"
-                className="data-[slot=sidebar-menu-button]:p-0.5! hover:bg-transparent"
-              >
-                <img src={LogoBlue} alt="Logo CASDventário" className="w-8" />
-                <span className="text-lg font-bold text-primary">CASDventário</span>
-              </SidebarMenuButton>
-            </NavLink>
+            <SidebarMenuButton
+              render={<NavLink to={"/"} />}
+              size="lg"
+              className="data-[slot=sidebar-menu-button]:p-0.5! hover:bg-transparent"
+            >
+              <img src={LogoBlue} alt="Logo CASDventário" className="w-8" />
+              <span className="text-lg font-bold text-primary">CASDventário</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

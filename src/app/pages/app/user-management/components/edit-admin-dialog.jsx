@@ -120,10 +120,10 @@ export default function EditAdminDialog({ user }) {
 
   return (
     <Dialog open={openDialog} onOpenChange={abrirOuFechar}>
-      <DialogTrigger>
-        <Button variant="ghost" size="icon" onClick={() => abrirOuFechar(true)}>
-          <PencilSimpleIcon />
-        </Button>
+      <DialogTrigger
+        render={<Button variant="ghost" size="icon" aria-label={`Editar ${user.name}`} />}
+      >
+        <PencilSimpleIcon />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -222,9 +222,7 @@ export default function EditAdminDialog({ user }) {
             <Button type="submit" variant="default" disabled={salvando}>
               {salvando ? 'Salvando...' : 'Editar'}
             </Button>
-            <DialogClose>
-              <Button variant="outline">Cancelar</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Cancelar</Button>} />
           </DialogFooter>
         </form>
       </DialogContent>

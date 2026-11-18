@@ -82,15 +82,9 @@ export default function AddAdminDialog() {
 
   return (
     <Dialog open={openDialog} onOpenChange={(open) => setOpenDialog(open)}>
-      <DialogTrigger>
-        <Button
-          onClick={() => setOpenDialog(true)}
-          variant="secondary"
-          size="lg"
-        >
-          <PlusIcon />
-          Adicionar Administrador
-        </Button>
+      <DialogTrigger render={<Button variant="secondary" size="lg" />}>
+        <PlusIcon />
+        Adicionar Administrador
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -161,9 +155,7 @@ export default function AddAdminDialog() {
             <Button type="submit" variant="default" disabled={enviando}>
               {enviando ? 'Cadastrando...' : 'Cadastrar'}
             </Button>
-            <DialogClose>
-              <Button variant="outline">Cancelar</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Cancelar</Button>} />
           </DialogFooter>
         </form>
       </DialogContent>

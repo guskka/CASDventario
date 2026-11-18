@@ -53,14 +53,14 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
         <SinoNotificacoes />
 
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" size="lg" className="flex h-12">
-              <img
-                className="w-8 h-8 rounded-full object-cover"
-                src={avatarUrl}
-                alt={`Avatar de ${nome}`}
-              />
-            </Button>
+          <DropdownMenuTrigger
+            render={<Button variant="ghost" size="lg" className="flex h-12" aria-label="Menu da conta" />}
+          >
+            <img
+              className="w-8 h-8 rounded-full object-cover"
+              src={avatarUrl}
+              alt={`Avatar de ${nome}`}
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="min-w-52">
             <DropdownMenuGroup>
