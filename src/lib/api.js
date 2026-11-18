@@ -188,6 +188,58 @@ export function deletarAluno(rm) {
 }
 
 // ============================================================
+//  TIPOS DE MATERIAL, REMESSAS E ESTOQUE
+// ============================================================
+
+// Tipos de material ativos (Kit Poliedro, Português...), em ordem alfabética.
+export function listarMateriais() {
+  return request("/materiais");
+}
+
+export function cadastrarMaterial(nome) {
+  return request("/materiais", {
+    method: "POST",
+    body: JSON.stringify({ nome }),
+  });
+}
+
+// Remessas com os materiais (itens) e os totais, mais recentes primeiro.
+export function listarRemessas() {
+  return request("/remessas");
+}
+
+// dados: { dataRecebimento: "AAAA-MM-DD", origem, descricao,
+//          itens: [{ id?, materialId, volume, anoLetivo, quantidade }] }
+// Na edição, "itens" é a lista completa (veja as regras no backend).
+export function cadastrarRemessa(dados) {
+  return request("/remessas", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+}
+
+export function atualizarRemessa(id, dados) {
+  return request(`/remessas/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados),
+  });
+}
+
+export function deletarRemessa(id) {
+  return request(`/remessas/${id}`, { method: "DELETE" });
+}
+
+// Tela Estoque: um total por material (tipo + volume + ano), somando as remessas.
+export function resumoEstoque() {
+  return request("/estoques/resumo");
+}
+
+// Cada material de cada remessa. somenteDisponivel = só o que ainda tem saldo.
+export function listarEstoque(somenteDisponivel = false) {
+  return request(somenteDisponivel ? "/estoques?disponivel=1" : "/estoques");
+}
+
+// ============================================================
 //  NOTEBOOKS
 // ============================================================
 

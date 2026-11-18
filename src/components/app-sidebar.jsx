@@ -44,12 +44,12 @@ const data = {
     },
     {
       title: "Remessas",
-      url: "/",
+      url: "/remessas",
       icon: PackageIcon,
     },
     {
-      title: "Livros",
-      url: "/",
+      title: "Estoque",
+      url: "/estoque",
       icon: BookIcon,
     },
     {

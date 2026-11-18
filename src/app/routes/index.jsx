@@ -9,6 +9,8 @@ import AppearancePage from '../pages/app/appearance';
 import ProfilePage from '../pages/app/profile';
 import AlunosPage from '../pages/app/alunos';
 import NotebooksPage from '../pages/app/notebooks';
+import RemessasPage from '../pages/app/remessas';
+import EstoquePage from '../pages/app/estoque';
 
 export function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ export function AppRoutes() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/alunos" element={<AlunosPage />} />
           <Route path="/notebooks" element={<NotebooksPage />} />
+          <Route path="/remessas" element={<RemessasPage />} />
+          <Route path="/estoque" element={<EstoquePage />} />
           <Route path="/appearence" element={<AppearancePage />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />

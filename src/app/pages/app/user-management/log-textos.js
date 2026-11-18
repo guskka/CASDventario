@@ -9,6 +9,7 @@ export const ACOES = {
 
 export const ENTIDADES = {
   usuario: 'Administrador',
+  material: 'Tipo de material',
   aluno: 'Aluno',
   notebook: 'Notebook',
   remessa: 'Remessa',
@@ -42,6 +43,15 @@ const CAMPOS = {
   sistema_operacional: 'Sistema operacional',
   id_remessa: 'ID',
   descricao: 'Descrição',
+  materiais_resumo: 'Materiais',
+  total_recebido: 'Total recebido',
+  total_disponivel: 'Total disponível',
+  id_material: 'ID',
+  nome: 'Nome',
+  ativo: 'Ativo',
+  fk_id_material: 'Tipo de material (ID)',
+  qtd_recebida: 'Quantidade recebida',
+  qtd_disponivel: 'Quantidade disponível',
   total_kits: 'Total de kits',
   ano_letivo_material: 'Ano letivo',
   volume_material: 'Volume',
@@ -91,6 +101,8 @@ export function rotuloCampo(campo) {
 }
 
 const DATA_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+// Datas sem hora (colunas DATE, como "data de recebimento") chegam como meia-noite em UTC.
+const SO_DATA = /T00:00:00(\.000)?Z$/;
 
 // Valor como aparece na tela: datas no formato brasileiro, "ATIVO" -> "Ativo".
 export function formatarValor(valor) {
@@ -100,8 +112,14 @@ export function formatarValor(valor) {
   if (valor === null || valor === '') {
     return 'vazio';
   }
+  if (typeof valor === 'boolean') {
+    return valor ? 'Sim' : 'Não';
+  }
   if (typeof valor === 'string' && DATA_ISO.test(valor)) {
-    return new Date(valor).toLocaleString('pt-BR');
+    // Sem isto, uma data como 10/03 apareceria como 09/03 (fuso de Brasília).
+    return SO_DATA.test(valor)
+      ? new Date(valor).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+      : new Date(valor).toLocaleString('pt-BR');
   }
   if (typeof valor === 'string' && /^[A-Z][A-Z_]+$/.test(valor)) {
     const texto = valor.replace(/_/g, ' ').toLowerCase();
