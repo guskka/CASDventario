@@ -17,7 +17,6 @@ const ORDER_BY = [
   { label: 'Modelo', value: 'modelo' },
   { label: 'RAM', value: 'memoria_ram_gb' },
   { label: 'Armazenamento', value: 'armazenamento_gb' },
-  { label: 'Status', value: 'status' },
 ];
 
 const TODOS = 'TODOS';
