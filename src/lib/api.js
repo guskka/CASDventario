@@ -168,10 +168,11 @@ export function buscarAluno(rm) {
   return request(`/alunos/${rm}`);
 }
 
-export function cadastrarAluno({ rm, nome, email, turma, curso }) {
+// turma pode ser null (aluno sem turma); status padrão ATIVO.
+export function cadastrarAluno({ rm, nome, email, turma, curso, status }) {
   return request("/alunos", {
     method: "POST",
-    body: JSON.stringify({ rm, nome, email, turma, curso }),
+    body: JSON.stringify({ rm, nome, email, turma, curso, status }),
   });
 }
 
