@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PlusIcon, XIcon } from '@phosphor-icons/react';
+import { PlusIcon } from '@phosphor-icons/react';
 
 import {
   Dialog,
@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
 import CampoSelect from '@/components/campo-select';
+import BuscaAluno from '@/components/busca-aluno';
 import { listarAlunos, listarEstoque, registrarEntrega } from '@/lib/api';
 import { avisar, ENTREGAS_ALTERADAS } from '@/lib/eventos';
 import {
@@ -25,15 +26,12 @@ import {
   rotuloOrigem,
 } from '../../remessas/remessas-textos';
 
-const MAXIMO_SUGESTOES = 6;
-
 // Janela "Registrar entrega": escolhe o aluno (busca por nome ou RM), o
 // material do estoque (só os que têm saldo) e a quantidade.
 export default function EntregaDialog() {
   const [aberta, setAberta] = useState(false);
   const [alunos, setAlunos] = useState([]);
   const [estoque, setEstoque] = useState([]);
-  const [buscaAluno, setBuscaAluno] = useState('');
   const [aluno, setAluno] = useState(null);
   const [estoqueId, setEstoqueId] = useState(null);
   const [quantidade, setQuantidade] = useState('1');
@@ -43,7 +41,6 @@ export default function EntregaDialog() {
 
   function abrirOuFechar(abrir) {
     if (abrir) {
-      setBuscaAluno('');
       setAluno(null);
       setEstoqueId(null);
       setQuantidade('1');
@@ -59,16 +56,6 @@ export default function EntregaDialog() {
     }
     setAberta(abrir);
   }
-
-  const termo = buscaAluno.trim().toLowerCase();
-  const sugestoes = termo
-    ? alunos
-        .filter(
-          (a) =>
-            a.nome_completo.toLowerCase().includes(termo) || String(a.rm_aluno).includes(termo),
-        )
-        .slice(0, MAXIMO_SUGESTOES)
-    : [];
 
   const opcoesEstoque = estoque.map((item) => ({
     value: String(item.id_estoque),
@@ -130,57 +117,7 @@ export default function EntregaDialog() {
           <FieldGroup>
             {erro && <p className="text-sm text-destructive">{erro}</p>}
 
-            <Field>
-              <Label htmlFor="entrega-aluno">
-                Aluno<span className="text-destructive">*</span>
-              </Label>
-              {aluno ? (
-                <div className="flex items-center justify-between rounded-md border px-3 py-2">
-                  <span>
-                    {aluno.nome_completo}{' '}
-                    <span className="text-muted-foreground">(RM {aluno.rm_aluno})</span>
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Trocar aluno"
-                    onClick={() => setAluno(null)}
-                  >
-                    <XIcon />
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <Input
-                    id="entrega-aluno"
-                    autoComplete="off"
-                    placeholder="Digite o nome ou o RM do aluno"
-                    value={buscaAluno}
-                    onChange={(e) => setBuscaAluno(e.target.value)}
-                  />
-                  {sugestoes.length > 0 && (
-                    <ul className="rounded-md border" aria-label="Alunos encontrados">
-                      {sugestoes.map((a) => (
-                        <li key={a.rm_aluno}>
-                          <button
-                            type="button"
-                            className="w-full px-3 py-2 text-left hover:bg-accent"
-                            onClick={() => setAluno(a)}
-                          >
-                            {a.nome_completo}{' '}
-                            <span className="text-muted-foreground">(RM {a.rm_aluno})</span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {termo && sugestoes.length === 0 && (
-                    <FieldDescription>Nenhum aluno ativo encontrado.</FieldDescription>
-                  )}
-                </>
-              )}
-            </Field>
+            <BuscaAluno id="entrega-aluno" alunos={alunos} aluno={aluno} onChange={setAluno} />
 
             {estoque.length === 0 ? (
               <p className="text-sm text-muted-foreground">

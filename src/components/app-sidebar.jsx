@@ -21,6 +21,7 @@ import {
   BellIcon,
   GearIcon,
   HandHeartIcon,
+  ArrowsLeftRightIcon,
 } from "@phosphor-icons/react";
 import LogoBlue from "../assets/brand/casdventario-blue-logo.svg";
 import { usuarioEhMestre } from "@/lib/api";
@@ -62,6 +63,11 @@ const data = {
       title: "Notebooks",
       url: "/notebooks",
       icon: LaptopIcon,
+    },
+    {
+      title: "Empréstimos",
+      url: "/emprestimos",
+      icon: ArrowsLeftRightIcon,
     },
   ],
   navSecondary: [

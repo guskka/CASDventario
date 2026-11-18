@@ -263,6 +263,38 @@ export function desfazerEntrega(id) {
 }
 
 // ============================================================
+//  EMPRÉSTIMOS DE NOTEBOOK
+// ============================================================
+
+// Mais recentes primeiro. situacao (opcional): EM_ANDAMENTO, ATRASADO ou DEVOLVIDO.
+export function listarEmprestimos(situacao) {
+  const query = situacao ? `?situacao=${encodeURIComponent(situacao)}` : "";
+  return request(`/emprestimos${query}`);
+}
+
+// dados: { notebookId, alunoRm, previsaoDevolucao: "AAAA-MM-DD", checklist: {...} }
+// O notebook passa a "emprestado" sozinho; a API recusa se não estiver disponível.
+export function registrarEmprestimo(dados) {
+  return request("/emprestimos", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+}
+
+// Só a previsão de devolução pode mudar (mais prazo).
+export function alterarPrevisaoEmprestimo(id, previsaoDevolucao) {
+  return request(`/emprestimos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ previsaoDevolucao }),
+  });
+}
+
+// Desfaz um empréstimo registrado por engano (o notebook volta a ficar disponível).
+export function desfazerEmprestimo(id) {
+  return request(`/emprestimos/${id}`, { method: "DELETE" });
+}
+
+// ============================================================
 //  NOTEBOOKS
 // ============================================================
 

@@ -66,9 +66,13 @@ const CAMPOS = {
   fk_rm_aluno: 'Aluno (RM)',
   fk_id_usuario: 'Registrado por (ID)',
   qtd_entregue: 'Quantidade entregue',
+  notebook: 'Notebook',
   aluno: 'Aluno',
   material: 'Material',
   registrado_por: 'Registrado por',
+  situacao: 'Situação',
+  estado_saida: 'Estado na saída',
+  estado_devolucao: 'Estado na devolução',
   data_entrega_kit: 'Data da entrega',
   data_registro: 'Data do registro',
   id_emprestimo_notebook: 'ID',
@@ -103,6 +107,18 @@ export function rotuloCampo(campo) {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
+// Valores do banco que precisam de acento (os outros viram "Primeira maiúscula").
+const VALORES_COM_ACENTO = {
+  OTIMO: 'Ótimo',
+  NAO_POSSUI: 'Não possui',
+  DISPONIVEL: 'Disponível',
+  INDISPONIVEL: 'Indisponível (emprestado)',
+  MANUTENCAO: 'Em manutenção',
+  EMPRESTIMO: 'Empréstimo',
+  DEVOLUCAO: 'Devolução',
+  BASICO: 'Básico',
+};
+
 const DATA_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 // Datas sem hora (colunas DATE, como "data de recebimento") chegam como meia-noite em UTC.
 const SO_DATA = /T00:00:00(\.000)?Z$/;
@@ -123,6 +139,9 @@ export function formatarValor(valor) {
     return SO_DATA.test(valor)
       ? new Date(valor).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
       : new Date(valor).toLocaleString('pt-BR');
+  }
+  if (VALORES_COM_ACENTO[valor]) {
+    return VALORES_COM_ACENTO[valor];
   }
   if (typeof valor === 'string' && /^[A-Z][A-Z_]+$/.test(valor)) {
     const texto = valor.replace(/_/g, ' ').toLowerCase();

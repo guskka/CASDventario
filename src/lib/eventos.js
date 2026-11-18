@@ -6,6 +6,7 @@ export const ALUNOS_ALTERADOS = 'alunos-alterados';
 export const NOTEBOOKS_ALTERADOS = 'notebooks-alterados';
 export const REMESSAS_ALTERADAS = 'remessas-alteradas';
 export const ENTREGAS_ALTERADAS = 'entregas-alteradas';
+export const EMPRESTIMOS_ALTERADOS = 'emprestimos-alterados';
 
 export function avisar(evento) {
   window.dispatchEvent(new Event(evento));
