@@ -27,6 +27,7 @@ async function fetchUsers() {
     id: u.id_usuario,
     name: u.nome_completo,
     username: u.apelido ?? "",
+    foto: u.url_foto,
     email: u.email,
     status: u.status,
     role: u.tipo,

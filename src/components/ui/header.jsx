@@ -4,6 +4,7 @@ import { UserIcon, SignOutIcon, PaintBrushIcon } from "@phosphor-icons/react";
 
 import { usuarioLogado, encerrarSessao } from "@/lib/api";
 import SinoNotificacoes from "@/components/sino-notificacoes";
+import { urlAvatar } from "@/lib/avatar";
 
 import {
   DropdownMenu,
@@ -37,7 +38,8 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
     navigate("/signin", { replace: true });
   }
 
-  const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(nome)}`;
+  // Foto de perfil, se a pessoa enviou uma; senão, o avatar automático.
+  const avatarUrl = urlAvatar(nome, usuario?.url_foto);
 
   return (
     <header className="flex items-center justify-between w-full h-24 px-6 border-b">
@@ -54,7 +56,7 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
           <DropdownMenuTrigger>
             <Button variant="ghost" size="lg" className="flex h-12">
               <img
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full object-cover"
                 src={avatarUrl}
                 alt={`Avatar de ${nome}`}
               />
@@ -64,7 +66,7 @@ export default function Header({ headerTitle, AccountName, AccountPosition }) {
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex items-center gap-2">
-                  <img src={avatarUrl} className="w-8 h-8 rounded-full" />
+                  <img src={avatarUrl} className="w-8 h-8 rounded-full object-cover" />
                   <div className="flex flex-col">
                     <span className="text-sm text-foreground">{nome}</span>
                     <span>{cargo}</span>

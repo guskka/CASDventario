@@ -1,5 +1,7 @@
-// URL base da sua API. Trocar aqui se a porta/endereço do backend mudar.
-const API_URL = "http://127.0.0.1:3333";
+// URL base da API. Padrão: o backend local (porta 3333). Para apontar para outro
+// endereço (outro computador, servidor de produção, backend de teste), crie um
+// arquivo .env na pasta do frontend com: VITE_API_URL=http://endereco:porta
+export const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:3333";
 
 // Função genérica que todas as chamadas usam por baixo dos panos.
 // Ela já lida com JSON e com erros vindos da API.
@@ -8,7 +10,8 @@ async function request(caminho, opcoes = {}) {
 
   // Só avisa que está mandando JSON quando realmente há um corpo
   // (a API recusa DELETE/GET com "Content-Type: application/json" e corpo vazio).
-  if (opcoes.body !== undefined) {
+  // Arquivos (FormData) não: o navegador monta o cabeçalho certo sozinho.
+  if (opcoes.body !== undefined && !(opcoes.body instanceof FormData)) {
     headers["Content-Type"] = "application/json";
   }
 
@@ -101,6 +104,19 @@ export function cadastrarUsuario({ nome, email, apelido, tipo }) {
 // Histórico de alterações (aba Logs, só Mestre). Os mais recentes primeiro.
 export function listarLogs() {
   return request("/logs");
+}
+
+// Envia (ou troca) a própria foto de perfil. arquivo = File do <input type="file">.
+// A API aceita JPG, PNG ou WebP até 2 MB e devolve o usuário com url_foto.
+export function enviarFoto(id, arquivo) {
+  const formulario = new FormData();
+  formulario.append("foto", arquivo);
+  return request(`/usuarios/${id}/foto`, { method: "PUT", body: formulario });
+}
+
+// Remove a própria foto (volta o avatar automático).
+export function removerFoto(id) {
+  return request(`/usuarios/${id}/foto`, { method: "DELETE" });
 }
 
 // Reenvia o convite de uma conta PENDENTE (o link anterior deixa de valer).

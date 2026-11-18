@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowsDownUpIcon } from '@phosphor-icons/react';
 
 import EditAdminDialog from './components/edit-admin-dialog';
+import { urlAvatar } from '@/lib/avatar';
 
 const columnHelper = createColumnHelper();
 
@@ -23,17 +24,16 @@ export const columns = columnHelper.columns([
   columnHelper.accessor('name', {
     header: 'Nome',
 
-    cell: ({ getValue }) => {
+    cell: ({ getValue, row }) => {
       const name = getValue();
 
-      const avatarUrl = `https://api.dicebear.com/10.x/shadows/svg?seed=${encodeURIComponent(
-        name
-      )}`;
+      // Foto de perfil, se a pessoa enviou uma; senão, o avatar automático.
+      const avatarUrl = urlAvatar(name, row.original.foto);
 
       return (
         <div className="flex items-center gap-4">
           <img
-            className="w-8 h-8 rounded-full"
+            className="w-8 h-8 rounded-full object-cover"
             src={avatarUrl}
             alt={`Avatar de ${name}`}
           />
