@@ -50,6 +50,9 @@ export function ThemeProvider({
   );
 }
 
+// O hook fica junto do provider (padrão do shadcn); só desativa o recarregamento
+// rápido deste arquivo durante o desenvolvimento.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
 

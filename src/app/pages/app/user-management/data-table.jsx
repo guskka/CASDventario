@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { useTable } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -31,6 +30,10 @@ export function DataTable({
     features,
     data,
     columns,
+    // A busca sempre procura o texto digitado dentro da coluna (sem diferenciar
+    // maiúsculas). Fixar isso evita o aviso "filterFn ... is not registered"
+    // que aparecia enquanto a tabela ainda estava vazia (carregando).
+    defaultColumn: { filterFn: 'includesString' },
     initialState: {
       pagination: {
         pageSize: pageSize,

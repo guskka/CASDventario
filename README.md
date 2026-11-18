@@ -32,7 +32,7 @@ A ONG distribui **kits** e realiza o **empréstimo de notebooks** a alunos, e es
   - [Pré-requisitos](#-pré-requisitos)
   - [Instalação](#-instalação)
 - [Como o sistema funciona](#-como-o-sistema-funciona)
-- [Estrutura de pastas](#-estrutura-de-pastas)
+- [Estrutura de pastas](#️-estrutura-de-pastas)
 - [Scripts disponíveis](#-scripts-disponíveis)
 - [Implantação](#-implantação)
 - [Construído com](#️-construído-com)

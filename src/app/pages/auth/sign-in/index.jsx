@@ -6,12 +6,9 @@ import LogotypeWhite from '../../../../assets/brand/casdventario-white-logotype.
 import { Link } from 'react-router-dom';
 import InputFloatingLabel from '../../../../components/ui/input-floating-label';
 import { Button } from '@/components/ui/button';
-import { useTheme } from '../../../../components/theme-provider';
 import { login } from '@/lib/api';
 
 export default function SignIn() {
-  const theme = useTheme();
-  const isDark = theme === 'dark';
   const navigate = useNavigate();
 
   // Guarda o que a pessoa digita nos campos.

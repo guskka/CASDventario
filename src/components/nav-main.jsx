@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { NavLink, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
 
 export default function NavMain({ items }) {
   const location = useLocation();

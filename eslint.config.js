@@ -30,6 +30,20 @@ export default defineConfig([
     },
   },
   {
+    // Componentes gerados pelo shadcn: exportam variantes/hooks junto dos
+    // componentes e importam React por padrão. Não vale editar o código gerado.
+    files: ['src/components/ui/**/*.{js,jsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
+    },
+  },
+  {
+    // Arquivos de configuração rodam no Node (ex: __dirname no vite.config.js).
+    files: ['*.config.js'],
+    languageOptions: { globals: globals.node },
+  },
+  {
     files: ['**/*.json'],
     ignores: ['package-lock.json'],
     plugins: { json },

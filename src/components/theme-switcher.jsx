@@ -1,12 +1,6 @@
 import { MoonIcon, SunIcon } from '@phosphor-icons/react';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
 
 export default function ThemeSwitcher() {
