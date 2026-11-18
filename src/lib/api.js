@@ -240,6 +240,29 @@ export function listarEstoque(somenteDisponivel = false) {
 }
 
 // ============================================================
+//  ENTREGAS DE KITS
+// ============================================================
+
+// Mais recentes primeiro, com aluno, material e quem registrou.
+export function listarEntregas() {
+  return request("/entregas-kit");
+}
+
+// dados: { estoqueId, alunoRm, qtdEntregue, dataEntrega? }
+// Desconta do estoque; a API recusa se não houver saldo suficiente.
+export function registrarEntrega(dados) {
+  return request("/entregas-kit", {
+    method: "POST",
+    body: JSON.stringify(dados),
+  });
+}
+
+// Desfaz uma entrega: a quantidade volta para o estoque.
+export function desfazerEntrega(id) {
+  return request(`/entregas-kit/${id}`, { method: "DELETE" });
+}
+
+// ============================================================
 //  NOTEBOOKS
 // ============================================================
 

@@ -11,6 +11,7 @@ import AlunosPage from '../pages/app/alunos';
 import NotebooksPage from '../pages/app/notebooks';
 import RemessasPage from '../pages/app/remessas';
 import EstoquePage from '../pages/app/estoque';
+import EntregasPage from '../pages/app/entregas';
 
 export function AppRoutes() {
   return (
@@ -33,6 +34,7 @@ export function AppRoutes() {
           <Route path="/notebooks" element={<NotebooksPage />} />
           <Route path="/remessas" element={<RemessasPage />} />
           <Route path="/estoque" element={<EstoquePage />} />
+          <Route path="/entregas" element={<EntregasPage />} />
           <Route path="/appearence" element={<AppearancePage />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />

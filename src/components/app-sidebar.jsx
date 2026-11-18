@@ -20,6 +20,7 @@ import {
   StudentIcon,
   BellIcon,
   GearIcon,
+  HandHeartIcon,
 } from "@phosphor-icons/react";
 import LogoBlue from "../assets/brand/casdventario-blue-logo.svg";
 import { usuarioEhMestre } from "@/lib/api";
@@ -51,6 +52,11 @@ const data = {
       title: "Estoque",
       url: "/estoque",
       icon: BookIcon,
+    },
+    {
+      title: "Entregas",
+      url: "/entregas",
+      icon: HandHeartIcon,
     },
     {
       title: "Notebooks",
