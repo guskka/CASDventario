@@ -1,8 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AppProtectedRoutes } from './protected';
 import SignIn from '../pages/auth/sign-in';
-import SignUp from '../pages/auth/sign-up';
 import ForgotPassword from '../pages/auth/forgotpassword';
 import AdmUserManagement from '../pages/app/user-management';
 import AppearancePage from '../pages/app/appearance';
@@ -13,7 +12,9 @@ export function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        {/* Cadastro público desativado: só um Mestre cadastra administradores,
+            pela tela Administradores. O arquivo pages/auth/sign-up continua no projeto. */}
+        <Route path="/signup" element={<Navigate to="/signin" replace />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route element={<AppProtectedRoutes />}>
           <Route path="/" element={<AdmUserManagement />} />

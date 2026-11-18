@@ -98,14 +98,8 @@ export default function SignIn() {
             >
               {carregando ? 'Entrando...' : 'Entrar'}
             </Button>
-            <p className="text-center">
-              Não tem uma conta?{' '}
-              <Link
-                to={'/signup'}
-                className="font-semibold text-primary underline active:text-foreground"
-              >
-                Registre-se
-              </Link>
+            <p className="text-center text-sm text-muted-foreground">
+              Não tem uma conta? Peça a um Administrador Mestre para cadastrar você.
             </p>
           </form>
         </main>

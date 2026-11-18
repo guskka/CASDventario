@@ -39,10 +39,20 @@ export function cadastrarUsuario({ nome, email, senha, apelido, status, tipo }) 
   });
 }
 
-// Lê o usuário salvo no login. Retorna null se não houver ninguém logado.
+// Lê o usuário salvo no login. Retorna null se não houver ninguém logado
+// (ou se o dado salvo estiver corrompido).
 export function usuarioLogado() {
-  const bruto = sessionStorage.getItem('usuario');
-  return bruto ? JSON.parse(bruto) : null;
+  try {
+    const bruto = sessionStorage.getItem('usuario');
+    return bruto ? JSON.parse(bruto) : null;
+  } catch {
+    return null;
+  }
+}
+
+// Encerra a sessão (botão "Sair").
+export function encerrarSessao() {
+  sessionStorage.removeItem('usuario');
 }
 
 // ============================================================
