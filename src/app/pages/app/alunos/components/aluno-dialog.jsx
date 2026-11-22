@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PencilSimpleIcon, PlusIcon } from '@phosphor-icons/react';
+import { ArrowsClockwiseIcon, PencilSimpleIcon, PlusIcon } from '@phosphor-icons/react';
 
 import {
   Dialog,
@@ -162,6 +162,13 @@ export default function AlunoDialog({ aluno }) {
 
   const dica = editando ? null : dicaRm(rm);
   const inicioEsperado = inicioEmailEsperado(nome, editando ? aluno.rm_aluno : rm);
+
+  // Botão "Refazer pelo padrão" (aparece no aviso amarelo). O aviso some depois
+  // do clique, então o foco volta para o campo de email.
+  function refazerPeloPadrao() {
+    setInicioEmail(inicioEsperado);
+    document.getElementById('aluno-email')?.focus();
+  }
   const foraDoPadrao = Boolean(inicioEsperado && inicioEmail && inicioEmail !== inicioEsperado);
   const faltaSobrenome = !editando && nome.trim() !== '' && !temSobrenome(nome);
   const dicasEmail = ['aluno-email-dominio'];
@@ -262,13 +269,19 @@ export default function AlunoDialog({ aluno }) {
                 </FieldDescription>
               )}
               {foraDoPadrao && (
-                <p id="aluno-email-padrao" className={AVISO_AMARELO}>
-                  Fora do padrão. O esperado é{' '}
-                  <strong className="font-medium break-all">
-                    {inicioEsperado}@{DOMINIO_EMAIL_ALUNO}
-                  </strong>
-                  . Dá para salvar assim mesmo.
-                </p>
+                <div className={`${AVISO_AMARELO} flex flex-wrap items-center gap-x-3 gap-y-1.5`}>
+                  <p id="aluno-email-padrao" className="min-w-0 flex-1 basis-56">
+                    Fora do padrão. O esperado é{' '}
+                    <strong className="font-medium break-all">
+                      {inicioEsperado}@{DOMINIO_EMAIL_ALUNO}
+                    </strong>
+                    . Dá para salvar assim mesmo.
+                  </p>
+                  <Button type="button" variant="outline" size="sm" onClick={refazerPeloPadrao}>
+                    <ArrowsClockwiseIcon />
+                    Refazer pelo padrão
+                  </Button>
+                </div>
               )}
               {emailAntigo && (
                 <p id="aluno-email-antigo" className={AVISO_AMARELO}>
