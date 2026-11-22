@@ -33,6 +33,7 @@ const STATUS_NOTEBOOK = {
   DISPONIVEL: 'Disponível',
   INDISPONIVEL: 'Indisponível (emprestado)',
   MANUTENCAO: 'Em manutenção',
+  INATIVO: 'Inativo (fora de uso)',
 };
 
 // Janela aberta ao clicar num empréstimo: dados do empréstimo e o checklist

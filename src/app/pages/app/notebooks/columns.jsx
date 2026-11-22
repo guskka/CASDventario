@@ -3,8 +3,9 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { DataTable } from '../user-management/data-table';
 import { Badge } from '@/components/ui/badge';
 import NotebookDialog from './components/notebook-dialog';
-import ExcluirNotebookDialog from './components/excluir-notebook-dialog';
-import { VARIANTE_STATUS, descreverVideo, rotuloStatus } from './notebooks-textos';
+import InativarNotebookDialog from './components/inativar-notebook-dialog';
+import ReativarNotebookDialog from './components/reativar-notebook-dialog';
+import { VARIANTE_STATUS, descreverVideo, rotuloMotivo, rotuloStatus } from './notebooks-textos';
 
 // Colunas da lista de notebooks, no mesmo modelo de alunos/columns.jsx.
 
@@ -57,9 +58,19 @@ const notebooksColumns = columnHelper.columns([
   columnHelper.accessor('status', {
     header: 'Status',
     meta: { className: 'w-48' },
-    cell: ({ getValue }) => (
-      <Badge variant={VARIANTE_STATUS[getValue()]}>{rotuloStatus(getValue())}</Badge>
-    ),
+    // Inativo: etiqueta curta "Inativo" + o motivo ao lado (cortado com "..."
+    // se não couber; a dica mostra o texto inteiro).
+    cell: ({ row, getValue }) =>
+      getValue() === 'INATIVO' ? (
+        <div className="flex min-w-0 items-center gap-2">
+          <Badge variant={VARIANTE_STATUS.INATIVO}>Inativo</Badge>
+          <span className="truncate text-xs text-muted-foreground">
+            {rotuloMotivo(row.original.motivo_inativacao)}
+          </span>
+        </div>
+      ) : (
+        <Badge variant={VARIANTE_STATUS[getValue()]}>{rotuloStatus(getValue())}</Badge>
+      ),
   }),
 
   columnHelper.display({
@@ -68,7 +79,12 @@ const notebooksColumns = columnHelper.columns([
     cell: ({ row }) => (
       <div className="flex">
         <NotebookDialog notebook={row.original} />
-        <ExcluirNotebookDialog notebook={row.original} />
+        {/* "Inativar" no lugar de "Excluir" (a janela de excluir fica para a 16c). */}
+        {row.original.status === 'INATIVO' ? (
+          <ReativarNotebookDialog notebook={row.original} />
+        ) : (
+          <InativarNotebookDialog notebook={row.original} />
+        )}
       </div>
     ),
   }),

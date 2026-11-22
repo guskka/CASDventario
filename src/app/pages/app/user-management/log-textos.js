@@ -5,6 +5,9 @@ export const ACOES = {
   EDITOU: { label: 'Editou', variant: 'secondary' },
   EXCLUIU: { label: 'Excluiu', variant: 'destructive' },
   REENVIOU_CONVITE: { label: 'Reenviou convite', variant: 'outline' },
+  INATIVOU: { label: 'Inativou', variant: 'muted' },
+  REATIVOU: { label: 'Reativou', variant: 'default' },
+  IMPORTOU: { label: 'Importou', variant: 'outline' },
 };
 
 export const ENTIDADES = {
@@ -78,6 +81,8 @@ const CAMPOS = {
   status_notebook: 'Status do notebook',
   id_devolucao: 'Devolução (ID)',
   motivo_manutencao: 'Motivo da manutenção',
+  motivo_inativacao: 'Motivo da inativação',
+  observacao_inativacao: 'Observação da inativação',
   data_entrega_kit: 'Data da entrega',
   data_registro: 'Data do registro',
   id_emprestimo_notebook: 'ID',
@@ -122,6 +127,10 @@ const VALORES_COM_ACENTO = {
   EMPRESTIMO: 'Empréstimo',
   DEVOLUCAO: 'Devolução',
   BASICO: 'Básico',
+  INATIVO: 'Inativo',
+  QUEBRADO: 'Quebrado sem conserto',
+  PERDIDO_ROUBADO: 'Perdido ou roubado',
+  DOADO_DEVOLVIDO: 'Doado ou devolvido',
 };
 
 const DATA_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;

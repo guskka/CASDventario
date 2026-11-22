@@ -408,3 +408,16 @@ export function atualizarNotebook(id, dados) {
 export function deletarNotebook(id) {
   return request(`/notebooks/${id}`, { method: "DELETE" });
 }
+
+// Tira o notebook de uso. motivo: QUEBRADO | PERDIDO_ROUBADO | DOADO_DEVOLVIDO | OUTRO
+export function inativarNotebook(id, { motivo, observacao }) {
+  return request(`/notebooks/${id}/inativar`, {
+    method: "PATCH",
+    body: JSON.stringify({ motivo, observacao }),
+  });
+}
+
+// Notebook inativo volta a ficar Disponível.
+export function reativarNotebook(id) {
+  return request(`/notebooks/${id}/reativar`, { method: "PATCH" });
+}

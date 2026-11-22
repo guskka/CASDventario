@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import BotaoDirecaoOrdem from '@/components/botao-direcao-ordem';
+import BotaoMostrarInativos from '@/components/botao-mostrar-inativos';
 import FiltroSelect from '@/components/filtro-select';
 import NotebooksDataTable from '../columns';
 import { listarNotebooks } from '@/lib/api';
@@ -21,12 +22,15 @@ const ORDER_BY = [
 
 const TODOS = 'TODOS';
 const FILTRO_STATUS = [{ label: 'Todos os status', value: TODOS }, ...STATUS_NOTEBOOK];
+// Com os inativos escondidos, o filtro de status não oferece "Inativo".
+const FILTRO_STATUS_SEM_INATIVO = FILTRO_STATUS.filter((opcao) => opcao.value !== 'INATIVO');
 
 export default function NotebooksSection() {
   const [notebooks, setNotebooks] = useState([]);
   const [busca, setBusca] = useState('');
   const [sorted, setSorted] = useState([{ id: 'id_notebook', desc: false }]);
   const [status, setStatus] = useState(TODOS);
+  const [mostrarInativos, setMostrarInativos] = useState(false);
   const [erro, setErro] = useState('');
 
   useEffect(() => {
@@ -41,19 +45,30 @@ export default function NotebooksSection() {
 
     carregar();
 
-    // Recarrega depois de cadastrar, editar ou excluir um notebook.
+    // Recarrega depois de cadastrar, editar, inativar ou reativar um notebook.
     window.addEventListener(NOTEBOOKS_ALTERADOS, carregar);
     return () => window.removeEventListener(NOTEBOOKS_ALTERADOS, carregar);
   }, []);
 
+  // Os inativos (fora de uso) ficam escondidos até "Mostrar inativos" ser ligado.
   const notebooksFiltrados = useMemo(
-    () => notebooks.filter((nb) => status === TODOS || nb.status === status),
-    [notebooks, status],
+    () =>
+      notebooks.filter(
+        (nb) =>
+          (mostrarInativos || nb.status !== 'INATIVO') && (status === TODOS || nb.status === status),
+      ),
+    [notebooks, status, mostrarInativos],
   );
+
+  function alternarInativos() {
+    // Ao esconder os inativos, o filtro "Inativo" deixa de fazer sentido.
+    if (mostrarInativos && status === 'INATIVO') setStatus(TODOS);
+    setMostrarInativos(!mostrarInativos);
+  }
 
   // Resumo do topo: quantos há em cada status.
   const contagem = useMemo(() => {
-    const porStatus = { DISPONIVEL: 0, INDISPONIVEL: 0, MANUTENCAO: 0 };
+    const porStatus = { DISPONIVEL: 0, INDISPONIVEL: 0, MANUTENCAO: 0, INATIVO: 0 };
     notebooks.forEach((nb) => {
       porStatus[nb.status] = (porStatus[nb.status] ?? 0) + 1;
     });
@@ -96,9 +111,19 @@ export default function NotebooksSection() {
       <div className="p-4 w-full space-y-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-muted-foreground">Filtrar:</span>
-          <FiltroSelect items={FILTRO_STATUS} value={status} onValueChange={setStatus} dica="Status" />
+          <FiltroSelect
+            items={mostrarInativos ? FILTRO_STATUS : FILTRO_STATUS_SEM_INATIVO}
+            value={status}
+            onValueChange={setStatus}
+            dica="Status"
+          />
+          <BotaoMostrarInativos
+            mostrando={mostrarInativos}
+            quantidade={contagem.INATIVO}
+            onToggle={alternarInativos}
+          />
           <span className="ml-auto text-sm text-muted-foreground">
-            {notebooks.length} cadastrados · {contagem.DISPONIVEL} disponíveis ·{' '}
+            {notebooks.length - contagem.INATIVO} em uso · {contagem.DISPONIVEL} disponíveis ·{' '}
             {contagem.INDISPONIVEL} emprestados · {contagem.MANUTENCAO} em manutenção
           </span>
         </div>

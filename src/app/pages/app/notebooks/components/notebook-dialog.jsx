@@ -19,7 +19,7 @@ import { toast } from '@/components/ui/toast';
 import CampoSelect from '@/components/campo-select';
 import { atualizarNotebook, cadastrarNotebook } from '@/lib/api';
 import { avisar, NOTEBOOKS_ALTERADOS } from '@/lib/eventos';
-import { GB_MAXIMO, STATUS_EDITAVEIS } from '../notebooks-textos';
+import { GB_MAXIMO, STATUS_EDITAVEIS, rotuloMotivo } from '../notebooks-textos';
 
 function CampoTexto({ id, label, valor, onChange, maxLength, tipo = 'text', min, dica }) {
   return (
@@ -48,6 +48,7 @@ function CampoTexto({ id, label, valor, onChange, maxLength, tipo = 'text', min,
 export default function NotebookDialog({ notebook }) {
   const editando = Boolean(notebook);
   const emprestado = notebook?.status === 'INDISPONIVEL';
+  const inativo = notebook?.status === 'INATIVO';
 
   const [aberta, setAberta] = useState(false);
   const [modelo, setModelo] = useState('');
@@ -101,8 +102,9 @@ export default function NotebookDialog({ notebook }) {
       ramPlacaGrafica: numero(vram),
       sistemaOperacional: sistemaOperacional.trim(),
     };
-    // Notebook emprestado: o status não é enviado (muda sozinho na devolução).
-    if (!emprestado) {
+    // Emprestado ou inativo: o status não é enviado (muda pela devolução ou
+    // pelo botão Reativar).
+    if (!emprestado && !inativo) {
       dados.status = status;
     }
 
@@ -209,6 +211,12 @@ export default function NotebookDialog({ notebook }) {
               <p className="text-sm text-muted-foreground">
                 Status: <strong>Indisponível (emprestado)</strong>. Ele volta a ficar disponível
                 sozinho quando a devolução for registrada.
+              </p>
+            ) : inativo ? (
+              <p className="text-sm text-muted-foreground">
+                Status: <strong>Inativo (fora de uso)</strong>, motivo:{' '}
+                {rotuloMotivo(notebook.motivo_inativacao)}. Para voltar a usar, clique em Reativar
+                na lista.
               </p>
             ) : (
               <CampoSelect
