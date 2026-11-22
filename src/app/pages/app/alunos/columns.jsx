@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { DataTable } from '../user-management/data-table';
 import { Badge } from '@/components/ui/badge';
 import AlunoDialog from './components/aluno-dialog';
-import ExcluirAlunoDialog from './components/excluir-aluno-dialog';
+import InativarAlunoDialog from './components/inativar-aluno-dialog';
 import { CURSOS, STATUS_ALUNO, VARIANTE_STATUS, rotulo } from './alunos-textos';
 
 // Colunas da lista de alunos, no mesmo modelo de user-management/columns.jsx.
@@ -64,7 +64,8 @@ const alunosColumns = columnHelper.columns([
     cell: ({ row }) => (
       <div className="flex">
         <AlunoDialog aluno={row.original} />
-        <ExcluirAlunoDialog aluno={row.original} />
+        {/* "Inativar" no lugar de "Excluir" (a janela de excluir fica para a 16c). */}
+        {row.original.status !== 'INATIVO' && <InativarAlunoDialog aluno={row.original} />}
       </div>
     ),
   }),

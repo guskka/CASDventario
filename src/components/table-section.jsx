@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 
 import BotaoDirecaoOrdem from "@/components/botao-direcao-ordem";
+import BotaoMostrarInativos from "@/components/botao-mostrar-inativos";
 import UsersDataTable from "../app/pages/app/user-management/columns";
 import { listarUsuarios } from "@/lib/api";
 import { USUARIOS_ALTERADOS } from "@/lib/eventos";
@@ -58,6 +59,14 @@ export default function TableSection({ title }) {
   const inverterOrdem = () => getSorted(([atual]) => [{ id: atual.id, desc: !atual.desc }]);
 
   const [erro, setErro] = useState("");
+  const [mostrarInativos, setMostrarInativos] = useState(false);
+
+  // Os inativos ficam escondidos até "Mostrar inativos" ser ligado.
+  const usuariosVisiveis = useMemo(
+    () => (mostrarInativos ? users : users.filter((u) => u.status !== "INATIVO")),
+    [users, mostrarInativos],
+  );
+  const quantidadeInativos = users.filter((u) => u.status === "INATIVO").length;
 
   useEffect(() => {
     function carregar() {
@@ -125,14 +134,24 @@ export default function TableSection({ title }) {
         </div>
       </div>
 
-      <div className="p-4 w-full transition-all ease-in-out">
+      <div className="p-4 w-full space-y-4 transition-all ease-in-out">
+        <div className="flex flex-wrap items-center gap-2">
+          <BotaoMostrarInativos
+            mostrando={mostrarInativos}
+            quantidade={quantidadeInativos}
+            onToggle={() => setMostrarInativos(!mostrarInativos)}
+          />
+          <span className="ml-auto text-sm text-muted-foreground">
+            {users.length} {users.length === 1 ? "administrador cadastrado" : "administradores cadastrados"}
+          </span>
+        </div>
         {erro && (
-          <p className="mb-4 text-sm text-destructive">
+          <p className="text-sm text-destructive">
             Não foi possível carregar os administradores: {erro}
           </p>
         )}
         <UsersDataTable
-          users={users}
+          users={usuariosVisiveis}
           filterValue={globalFilter}
           sorting={sorted}
           onSortingChange={getSorted}

@@ -203,6 +203,11 @@ export function deletarAluno(rm) {
   return request(`/alunos/${rm}`, { method: "DELETE" });
 }
 
+// Empréstimos de um aluno (todos; os em aberto têm situacao diferente de DEVOLVIDO).
+export function emprestimosDoAluno(rm) {
+  return request(`/emprestimos?alunoRm=${encodeURIComponent(rm)}`);
+}
+
 // ============================================================
 //  DASHBOARD (página inicial)
 // ============================================================

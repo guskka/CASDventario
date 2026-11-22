@@ -7,6 +7,8 @@ import { DataTable } from './data-table';
 import { Badge } from '@/components/ui/badge';
 
 import EditAdminDialog from './components/edit-admin-dialog';
+import InativarAdminDialog from './components/inativar-admin-dialog';
+import { usuarioLogado } from '@/lib/api';
 import { urlAvatar } from '@/lib/avatar';
 
 const columnHelper = createColumnHelper();
@@ -54,7 +56,7 @@ const columns = columnHelper.columns([
       const variantMap = {
         ATIVO: "default",
         PENDENTE: "outline",
-        INATIVO: "destructive"
+        INATIVO: "muted" // etiqueta cinza
       }
 
       return (
@@ -73,13 +75,18 @@ const columns = columnHelper.columns([
     id: 'actions',
 
     meta: {
-      className: 'w-15',
+      className: 'w-24',
     },
 
+    // "Inativar" não aparece na própria linha nem em quem já está inativo.
     cell: ({ row }) => {
+      const ehVoceMesmo = usuarioLogado()?.id_usuario === row.original.id;
       return (
-        <div>
+        <div className="flex">
           <EditAdminDialog user={row.original} />
+          {!ehVoceMesmo && row.original.status !== 'INATIVO' && (
+            <InativarAdminDialog user={row.original} />
+          )}
         </div>
       );
     },

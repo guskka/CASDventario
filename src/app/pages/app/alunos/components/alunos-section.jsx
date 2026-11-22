@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 import BotaoDirecaoOrdem from '@/components/botao-direcao-ordem';
+import BotaoMostrarInativos from '@/components/botao-mostrar-inativos';
 import FiltroSelect from '@/components/filtro-select';
 import AlunosDataTable from '../columns';
 import { listarAlunos } from '@/lib/api';
@@ -26,6 +27,8 @@ const TODOS = 'TODOS';
 const FILTRO_CURSO = [{ label: 'Todos os cursos', value: TODOS }, ...CURSOS];
 const FILTRO_TURMA = [{ label: 'Todas as turmas', value: TODOS }, ...TURMAS];
 const FILTRO_STATUS = [{ label: 'Todos os status', value: TODOS }, ...STATUS_ALUNO];
+// Com os inativos escondidos, o filtro de status não oferece "Inativo".
+const FILTRO_STATUS_SEM_INATIVO = FILTRO_STATUS.filter((opcao) => opcao.value !== 'INATIVO');
 
 export default function AlunosSection() {
   const [alunos, setAlunos] = useState([]);
@@ -34,6 +37,7 @@ export default function AlunosSection() {
   const [curso, setCurso] = useState(TODOS);
   const [turma, setTurma] = useState(TODOS);
   const [status, setStatus] = useState(TODOS);
+  const [mostrarInativos, setMostrarInativos] = useState(false);
   const [erro, setErro] = useState('');
 
   useEffect(() => {
@@ -48,22 +52,31 @@ export default function AlunosSection() {
 
     carregar();
 
-    // Recarrega depois de cadastrar, editar ou excluir um aluno.
+    // Recarrega depois de cadastrar, editar ou inativar um aluno.
     window.addEventListener(ALUNOS_ALTERADOS, carregar);
     return () => window.removeEventListener(ALUNOS_ALTERADOS, carregar);
   }, []);
 
   // Aplica os filtros de curso, turma e status (a busca por texto é da tabela).
+  // Os inativos ficam escondidos até "Mostrar inativos" ser ligado.
   const alunosFiltrados = useMemo(
     () =>
       alunos.filter(
         (aluno) =>
+          (mostrarInativos || aluno.status !== 'INATIVO') &&
           (curso === TODOS || aluno.curso === curso) &&
           (turma === TODOS || (aluno.turma ?? SEM_TURMA) === turma) &&
           (status === TODOS || aluno.status === status),
       ),
-    [alunos, curso, turma, status],
+    [alunos, curso, turma, status, mostrarInativos],
   );
+  const quantidadeInativos = alunos.filter((aluno) => aluno.status === 'INATIVO').length;
+
+  function alternarInativos() {
+    // Ao esconder os inativos, o filtro "Inativo" deixa de fazer sentido.
+    if (mostrarInativos && status === 'INATIVO') setStatus(TODOS);
+    setMostrarInativos(!mostrarInativos);
+  }
 
   const handleOrderByChange = (columnId) => {
     if (columnId) {
@@ -104,10 +117,15 @@ export default function AlunosSection() {
           <FiltroSelect items={FILTRO_CURSO} value={curso} onValueChange={setCurso} dica="Curso" />
           <FiltroSelect items={FILTRO_TURMA} value={turma} onValueChange={setTurma} dica="Turma" />
           <FiltroSelect
-            items={FILTRO_STATUS}
+            items={mostrarInativos ? FILTRO_STATUS : FILTRO_STATUS_SEM_INATIVO}
             value={status}
             onValueChange={setStatus}
             dica="Status"
+          />
+          <BotaoMostrarInativos
+            mostrando={mostrarInativos}
+            quantidade={quantidadeInativos}
+            onToggle={alternarInativos}
           />
           <span className="ml-auto text-sm text-muted-foreground">
             {alunos.length} {alunos.length === 1 ? 'aluno cadastrado' : 'alunos cadastrados'}

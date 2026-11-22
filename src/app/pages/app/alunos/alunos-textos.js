@@ -25,7 +25,7 @@ export const STATUS_ALUNO = [
 export const VARIANTE_STATUS = {
   ATIVO: 'default',
   PENDENTE: 'outline',
-  INATIVO: 'destructive',
+  INATIVO: 'muted', // etiqueta cinza
 };
 
 export function rotulo(opcoes, valor) {
