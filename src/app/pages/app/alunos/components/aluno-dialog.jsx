@@ -11,17 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Field, FieldGroup } from '@/components/ui/field';
+import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import CampoSelect from '@/components/campo-select';
 import { toast } from '@/components/ui/toast';
 import { atualizarAluno, cadastrarAluno } from '@/lib/api';
+import { dicaRm, limparRm, MENSAGEM_RM, rmValido } from '@/lib/aluno';
 import { avisar, ALUNOS_ALTERADOS } from '@/lib/eventos';
 import { CURSOS, SEM_TURMA, STATUS_ALUNO, TURMAS } from '../alunos-textos';
-
-const RM_MAXIMO = 4294967295; // maior número aceito pela coluna rm_aluno (INT UNSIGNED)
 
 // Janela de cadastrar (sem "aluno") ou editar (com "aluno") um aluno.
 // Mesmo modelo das janelas da tela de Administradores.
@@ -56,9 +55,9 @@ export default function AlunoDialog({ aluno }) {
     event.preventDefault();
     setErro('');
 
-    const numeroRm = Number(rm);
-    if (!Number.isInteger(numeroRm) || numeroRm < 1 || numeroRm > RM_MAXIMO) {
-      setErro('Informe um RM válido (só números, maior que zero).');
+    // O RM só é digitado no cadastro; na edição ele fica travado como está.
+    if (!editando && !rmValido(rm)) {
+      setErro(MENSAGEM_RM);
       return;
     }
     if (!curso) {
@@ -79,7 +78,7 @@ export default function AlunoDialog({ aluno }) {
       if (editando) {
         await atualizarAluno(aluno.rm_aluno, dados);
       } else {
-        await cadastrarAluno({ rm: numeroRm, ...dados });
+        await cadastrarAluno({ rm: Number(rm), ...dados });
       }
       toast.add({
         type: 'success',
@@ -93,6 +92,8 @@ export default function AlunoDialog({ aluno }) {
       setSalvando(false);
     }
   }
+
+  const dica = editando ? null : dicaRm(rm);
 
   return (
     <Dialog open={aberta} onOpenChange={abrirOuFechar}>
@@ -126,14 +127,23 @@ export default function AlunoDialog({ aluno }) {
               </Label>
               <Input
                 id="aluno-rm"
-                type="number"
-                min="1"
-                max={RM_MAXIMO}
+                inputMode="numeric"
+                autoComplete="off"
                 required
                 disabled={editando}
                 value={rm}
-                onChange={(e) => setRm(e.target.value)}
+                onChange={(e) => setRm(limparRm(e.target.value))}
+                aria-invalid={dica?.erro || undefined}
+                aria-describedby={editando ? undefined : 'aluno-rm-dica'}
               />
+              {!editando && (
+                <FieldDescription
+                  id="aluno-rm-dica"
+                  className={dica.erro ? 'text-destructive' : undefined}
+                >
+                  {dica.texto}
+                </FieldDescription>
+              )}
             </Field>
             <Field>
               <Label htmlFor="aluno-nome">
