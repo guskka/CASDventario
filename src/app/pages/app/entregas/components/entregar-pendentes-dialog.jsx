@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import DicaTextoCortado from '@/components/dica-texto-cortado';
 import { toast } from '@/components/ui/toast';
 import { desfazerEntregas, entregarMaterial } from '@/lib/api';
 import { avisar, ENTREGAS_ALTERADAS } from '@/lib/eventos';
@@ -104,14 +105,17 @@ export default function EntregarPendentesDialog({ material, pendentes, rotuloCur
             {disponivel} → {falta ? '—' : disponivel - pendentes.length}
           </strong>
         </div>
-        <ul className="max-h-48 overflow-y-auto rounded-md border text-sm divide-y">
-          {pendentes.map((a) => (
-            <li key={a.rm_aluno} className="flex justify-between gap-3 px-3 py-1.5">
-              <span className="truncate">{a.nome_completo}</span>
-              <span className="text-muted-foreground">{a.turma ?? 'Sem turma'}</span>
-            </li>
-          ))}
-        </ul>
+        {/* min-w-0: sem isso, um nome muito comprido alargava a lista para fora da janela */}
+        <DicaTextoCortado className="min-w-0">
+          <ul className="max-h-48 overflow-y-auto rounded-md border text-sm divide-y">
+            {pendentes.map((a) => (
+              <li key={a.rm_aluno} className="flex justify-between gap-3 px-3 py-1.5">
+                <span className="truncate">{a.nome_completo}</span>
+                <span className="text-muted-foreground">{a.turma ?? 'Sem turma'}</span>
+              </li>
+            ))}
+          </ul>
+        </DicaTextoCortado>
 
         {falta && (
           <p className="text-sm text-destructive">

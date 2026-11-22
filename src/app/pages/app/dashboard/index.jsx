@@ -14,6 +14,7 @@ import Header from '@/components/ui/header';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import DicaTextoCortado from '@/components/dica-texto-cortado';
 import { resumoDashboard, usuarioLogado } from '@/lib/api';
 import CartaoResumo from './components/cartao-resumo';
 import ListaEmprestimos from './components/lista-emprestimos';
@@ -163,16 +164,18 @@ export default function DashboardPage() {
                         {resumo.ultimas_entregas.length === 0 ? (
                           <p className="text-sm text-muted-foreground">Nenhuma entrega ainda.</p>
                         ) : (
-                          <ul className="divide-y">
-                            {resumo.ultimas_entregas.map((e) => (
-                              <li key={e.id_entrega_kit} className="flex justify-between gap-4 py-2">
-                                <span className="min-w-0 truncate">{e.descricao}</span>
-                                <span className="shrink-0 text-sm text-muted-foreground">
-                                  {new Date(e.data_entrega_kit).toLocaleDateString('pt-BR')}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
+                          <DicaTextoCortado>
+                            <ul className="divide-y">
+                              {resumo.ultimas_entregas.map((e) => (
+                                <li key={e.id_entrega_kit} className="flex justify-between gap-4 py-2">
+                                  <span className="min-w-0 truncate">{e.descricao}</span>
+                                  <span className="shrink-0 text-sm text-muted-foreground">
+                                    {new Date(e.data_entrega_kit).toLocaleDateString('pt-BR')}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </DicaTextoCortado>
                         )}
                       </CardContent>
                     </Card>

@@ -29,17 +29,20 @@ function TooltipContent({
   sideOffset = 4,
   align = "center",
   alignOffset = 0,
+  anchor,
+  positionerClassName,
   children,
   ...props
 }) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
+        anchor={anchor}
         align={align}
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
-        className="isolate z-50">
+        className={cn("isolate z-50", positionerClassName)}>
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(

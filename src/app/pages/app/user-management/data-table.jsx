@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import DicaTextoCortado from '@/components/dica-texto-cortado';
 import { features } from './data-table-features';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
@@ -109,7 +110,7 @@ export function DataTable({
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className="overflow-hidden rounded-md border">
+      <DicaTextoCortado className="overflow-hidden rounded-md border">
         <Table className="table-fixed w-full">
           <TableHeader className="bg-card">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -166,7 +167,7 @@ export function DataTable({
             )}
           </TableBody>
         </Table>
-      </div>
+      </DicaTextoCortado>
       <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-2">
         <div className="flex items-center gap-2 text-sm">
           <span className="text-muted-foreground">Linhas por página</span>
