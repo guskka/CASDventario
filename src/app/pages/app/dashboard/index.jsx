@@ -5,8 +5,7 @@ import {
   ClockIcon,
   HandHeartIcon,
   LaptopIcon,
-  StudentIcon,
-  ArrowsLeftRightIcon,
+  UsersIcon,
   WarningCircleIcon,
 } from '@phosphor-icons/react';
 
@@ -15,15 +14,17 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import DicaTextoCortado from '@/components/dica-texto-cortado';
-import { resumoDashboard, usuarioLogado } from '@/lib/api';
+import { resumoDashboard } from '@/lib/api';
 import CartaoResumo from './components/cartao-resumo';
+import { BarrasPorMes, MedidorKits, PizzaNotebooks } from './components/graficos';
 import ListaEmprestimos from './components/lista-emprestimos';
 
-// Dashboard (item 14 do PLAN.md): página inicial com o resumo do sistema.
+// Dashboard: página inicial com o resumo do sistema (item 14) e os gráficos
+// do protótipo (item 21a, prototipo/dashboard.png). As listas de atenção
+// continuam embaixo dos gráficos.
 export default function DashboardPage() {
   const [resumo, setResumo] = useState(null);
   const [erro, setErro] = useState('');
-  const primeiroNome = (usuarioLogado()?.nome_completo ?? '').split(' ')[0];
 
   useEffect(() => {
     resumoDashboard()
@@ -42,9 +43,9 @@ export default function DashboardPage() {
           <main className="flex-1 overflow-y-auto">
             <div className="px-6 py-6 space-y-6">
               <div>
-                <h3 className="font-semibold text-xl">Olá{primeiroNome && `, ${primeiroNome}`}!</h3>
+                <h3 className="font-semibold text-xl">Dashboard</h3>
                 <p className="text-sm text-muted-foreground">
-                  Resumo do estoque, dos notebooks e dos empréstimos da ONG.
+                  Visão geral das operações da secretaria.
                 </p>
               </div>
 
@@ -55,50 +56,24 @@ export default function DashboardPage() {
 
               {resumo && (
                 <>
-                  {/* Números principais */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  {/* Números principais (modelo do protótipo) */}
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <CartaoResumo titulo="Alunos ativos" valor={resumo.alunos_ativos} icone={UsersIcon} tom="azul" />
                     <CartaoResumo
-                      titulo="Itens disponíveis no estoque"
-                      icone={BookIcon}
+                      titulo="Kits disponíveis no estoque"
                       valor={resumo.estoque.itens_disponiveis}
-                      detalhe={`${resumo.estoque.materiais} materiais · ${resumo.estoque.esgotados.length} esgotado(s)`}
-                      link="/estoque"
-                      textoLink="Ver estoque"
+                      icone={BookIcon}
+                      tom="laranja"
                     />
-                    <CartaoResumo
-                      titulo="Notebooks disponíveis"
-                      icone={LaptopIcon}
-                      valor={resumo.notebooks.disponiveis}
-                      detalhe={`de ${resumo.notebooks.total} · ${resumo.notebooks.emprestados} emprestado(s) · ${resumo.notebooks.manutencao} em manutenção`}
-                      link="/notebooks"
-                      textoLink="Ver notebooks"
-                    />
-                    <CartaoResumo
-                      titulo="Empréstimos em aberto"
-                      icone={ArrowsLeftRightIcon}
-                      valor={resumo.emprestimos.em_aberto}
-                      detalhe={
-                        atrasados.length > 0 ? (
-                          <span className="inline-flex items-center gap-1 font-medium text-destructive">
-                            <WarningCircleIcon weight="fill" />
-                            {atrasados.length} atrasado(s)
-                          </span>
-                        ) : (
-                          'Nenhum atrasado'
-                        )
-                      }
-                      link="/emprestimos"
-                      textoLink="Ver empréstimos"
-                    />
-                    <CartaoResumo
-                      titulo="Alunos ativos"
-                      icone={StudentIcon}
-                      valor={resumo.alunos_ativos}
-                      detalhe={`${resumo.estoque.itens_entregues} itens já entregues`}
-                      link="/alunos"
-                      textoLink="Ver alunos"
-                    />
+                    <CartaoResumo titulo="Notebooks em uso" valor={resumo.notebooks.total} icone={LaptopIcon} tom="verde" />
                   </div>
+
+                  {/* Gráficos */}
+                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <MedidorKits kits={resumo.kits_entregues} alunosAtivos={resumo.alunos_ativos} />
+                    <PizzaNotebooks notebooks={resumo.notebooks} />
+                  </div>
+                  <BarrasPorMes porMes={resumo.emprestimos_por_mes} />
 
                   {/* Empréstimos que pedem atenção */}
                   <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

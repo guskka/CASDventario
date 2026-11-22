@@ -1,33 +1,27 @@
-import { Link } from 'react-router-dom';
-import { ArrowRightIcon } from '@phosphor-icons/react';
+import { Card, CardContent } from '@/components/ui/card';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// Fundo e cor do ícone de cada cartão, como no protótipo (azul, laranja e verde).
+// O número e o título usam as cores de texto do tema.
+const TONS = {
+  azul: 'bg-[color-mix(in_oklab,var(--grafico-azul)_15%,transparent)] text-[var(--grafico-azul)]',
+  laranja: 'bg-[color-mix(in_oklab,var(--grafico-laranja)_18%,transparent)] text-[var(--grafico-marrom)] dark:text-[var(--grafico-laranja)]',
+  verde: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
+};
 
-// Cartão de resumo do Dashboard: nome (sem dois-pontos), número em destaque,
-// uma linha de detalhe e um link para a página daquele assunto.
-export default function CartaoResumo({ titulo, valor, detalhe, link, textoLink, icone: Icone }) {
+// Cartão de número do Dashboard (modelo do protótipo): ícone, título e o número.
+export default function CartaoResumo({ titulo, valor, icone: Icone, tom = 'azul' }) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-          {Icone && <Icone className="size-4" />}
-          {titulo}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <p className="text-3xl font-semibold text-foreground">
-          {Number(valor ?? 0).toLocaleString('pt-BR')}
-        </p>
-        <div className="min-h-5 text-sm text-muted-foreground">{detalhe}</div>
-        {link && (
-          <Link
-            to={link}
-            className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-          >
-            {textoLink}
-            <ArrowRightIcon className="size-3.5" />
-          </Link>
-        )}
+      <CardContent className="flex items-center gap-4">
+        <div className={`flex size-12 shrink-0 items-center justify-center rounded-lg ${TONS[tom]}`}>
+          {Icone && <Icone className="size-6" aria-hidden="true" />}
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground">{titulo}</p>
+          <p className="text-3xl font-semibold text-foreground">
+            {Number(valor ?? 0).toLocaleString('pt-BR')}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

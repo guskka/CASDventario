@@ -73,6 +73,13 @@
   --chart-3: oklch(0.685 0.169 237.323);
   --chart-4: oklch(0.5 0.134 242.749);
   --chart-5: oklch(0.391 0.09 240.876);
+  /* Gráficos do Dashboard (item 21a): cores do protótipo, ajustadas e conferidas
+     com o validador de paleta (separação para daltonismo e brilho em cada tema).
+     O laranja do protótipo (#f9b343) ficou um passo mais escuro para aparecer no
+     fundo branco; os números ficam sempre escritos ao lado (legenda e tabela). */
+  --grafico-laranja: #e7a22c;
+  --grafico-azul: #3193b4;
+  --grafico-marrom: #a56a00;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -127,6 +134,11 @@
   --chart-3: oklch(0.685 0.169 237.323);
   --chart-4: oklch(0.5 0.134 242.749);
   --chart-5: oklch(0.391 0.09 240.876);
+  /* Gráficos do Dashboard no tema escuro: os mesmos tons, um passo mais escuros
+     (faixa de brilho do fundo escuro), conferidos contra o fundo dos cartões. */
+  --grafico-laranja: #c68400;
+  --grafico-azul: #3193b4;
+  --grafico-marrom: #8c5100;
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
