@@ -91,7 +91,7 @@ export default function UsersDataTable({ users, filterValue, sorting, onSortingC
     <DataTable
       columns={columns}
       data={users}
-      pageSize={5}
+      chaveLinhas="administradores"
       filterValue={filterValue}
       sorting={sorting}
       onSortingChange={onSortingChange}

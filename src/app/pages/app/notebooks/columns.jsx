@@ -78,7 +78,7 @@ export default function NotebooksDataTable({ notebooks, filterValue, sorting, on
     <DataTable
       columns={notebooksColumns}
       data={notebooks}
-      pageSize={10}
+      chaveLinhas="notebooks"
       filterValue={filterValue}
       filterColumn="modelo"
       sorting={sorting}

@@ -74,7 +74,7 @@ export default function RemessasDataTable({ remessas, filterValue, sorting, onSo
     <DataTable
       columns={remessasColumns}
       data={remessas}
-      pageSize={10}
+      chaveLinhas="remessas"
       filterValue={filterValue}
       filterColumn="materiais"
       sorting={sorting}

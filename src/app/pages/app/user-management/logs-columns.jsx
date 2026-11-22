@@ -64,7 +64,7 @@ export default function LogsDataTable({ logs, filterValue, sorting, onSortingCha
     <DataTable
       columns={logsColumns}
       data={logs}
-      pageSize={10}
+      chaveLinhas="logs"
       filterValue={filterValue}
       filterColumn="resumo"
       sorting={sorting}

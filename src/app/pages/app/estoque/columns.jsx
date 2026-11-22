@@ -62,7 +62,7 @@ export default function EstoqueDataTable({ grupos, filterValue, sorting, onSorti
     <DataTable
       columns={estoqueColumns}
       data={grupos}
-      pageSize={10}
+      chaveLinhas="estoque"
       filterValue={filterValue}
       filterColumn="nome"
       sorting={sorting}

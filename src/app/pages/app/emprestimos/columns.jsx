@@ -91,7 +91,7 @@ export default function EmprestimosDataTable({
     <DataTable
       columns={emprestimosColumns}
       data={emprestimos}
-      pageSize={10}
+      chaveLinhas="emprestimos"
       filterValue={filterValue}
       filterColumn="aluno"
       sorting={sorting}

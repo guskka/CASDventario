@@ -11,17 +11,53 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { features } from './data-table-features';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
+
+const OPCOES_LINHAS = [10, 20, 50, 100].map((n) => ({ label: String(n), value: n }));
+const PREFIXO_LINHAS = 'casd-linhas-por-pagina:';
+
+// A escolha de "Linhas por página" fica guardada neste navegador, uma por lista.
+// Se o navegador bloquear o armazenamento (ex.: janela anônima), a lista
+// continua funcionando, só não lembra a escolha.
+function lerLinhasSalvas(chave) {
+  if (!chave) return null;
+  try {
+    const n = Number(localStorage.getItem(PREFIXO_LINHAS + chave));
+    return OPCOES_LINHAS.some((opcao) => opcao.value === n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+function salvarLinhas(chave, n) {
+  if (!chave) return;
+  try {
+    localStorage.setItem(PREFIXO_LINHAS + chave, String(n));
+  } catch {
+    // sem armazenamento: só não lembra a escolha
+  }
+}
 
 // filterColumn: id da coluna usada pela busca (padrão "name").
 // onRowClick (opcional): função chamada com os dados da linha clicada.
 // manterPagina (opcional): não volta para a página 1 quando os dados recarregam
 // (ex.: marcar um aluno na página 3 da tela de entregas).
+// pageSize: linhas por página até a pessoa escolher outra quantidade.
+// chaveLinhas: nome da lista, para lembrar a escolha de "Linhas por página".
 export function DataTable({
   columns,
   data,
-  pageSize = 10,
+  pageSize = 20,
+  chaveLinhas,
   filterValue = '',
   filterColumn = 'name',
   sorting,
@@ -29,6 +65,8 @@ export function DataTable({
   onRowClick,
   manterPagina = false,
 }) {
+  const [linhasIniciais] = React.useState(() => lerLinhasSalvas(chaveLinhas) ?? pageSize);
+
   const table = useTable({
     features,
     data,
@@ -40,7 +78,7 @@ export function DataTable({
     autoResetPageIndex: manterPagina ? false : undefined,
     initialState: {
       pagination: {
-        pageSize: pageSize,
+        pageSize: linhasIniciais,
       },
     },
     state: {
@@ -61,6 +99,13 @@ export function DataTable({
       table.setPageIndex(totalPaginas - 1);
     }
   }, [totalPaginas, paginaAtual, table]);
+
+  const linhasPorPagina = table.state.pagination.pageSize;
+  function mudarLinhas(n) {
+    // setPageSize mantém à vista a linha que estava no topo da página.
+    table.setPageSize(n);
+    salvarLinhas(chaveLinhas, n);
+  }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -122,27 +167,46 @@ export function DataTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end gap-2">
-        <Button
-          variant="ghost"
-          size='icon'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <CaretLeftIcon />
-        </Button>
-        <p>
-          Página {table.state.pagination.pageIndex + 1} de{' '}
-          {table.getPageCount()}
-        </p>
-        <Button
-          variant="ghost"
-          size='icon'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <CaretRightIcon />
-        </Button>
+      <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-2">
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Linhas por página</span>
+          <Select items={OPCOES_LINHAS} value={linhasPorPagina} onValueChange={mudarLinhas}>
+            <SelectTrigger size="sm" aria-label="Linhas por página">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {OPCOES_LINHAS.map((opcao) => (
+                  <SelectItem key={opcao.value} value={opcao.value}>
+                    {opcao.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size='icon'
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <CaretLeftIcon />
+          </Button>
+          <p>
+            Página {table.state.pagination.pageIndex + 1} de{' '}
+            {Math.max(1, table.getPageCount())}
+          </p>
+          <Button
+            variant="ghost"
+            size='icon'
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <CaretRightIcon />
+          </Button>
+        </div>
       </div>
     </div>
   );

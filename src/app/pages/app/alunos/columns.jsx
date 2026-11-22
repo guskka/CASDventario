@@ -75,7 +75,7 @@ export default function AlunosDataTable({ alunos, filterValue, sorting, onSortin
     <DataTable
       columns={alunosColumns}
       data={alunos}
-      pageSize={10}
+      chaveLinhas="alunos"
       filterValue={filterValue}
       filterColumn="nome"
       sorting={sorting}

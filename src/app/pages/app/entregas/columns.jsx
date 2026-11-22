@@ -100,7 +100,8 @@ export default function EntregasDataTable({ alunos, salvando, esgotado, aoMarcar
     <DataTable
       columns={colunas}
       data={alunos}
-      pageSize={10}
+      pageSize={50}
+      chaveLinhas="entregas"
       filterColumn="aluno"
       sorting={SEM_ORDEM}
       onSortingChange={nadaAFazer}
