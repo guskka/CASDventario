@@ -14,13 +14,35 @@ import {
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
 import CampoSelect from '@/components/campo-select';
 import { toast } from '@/components/ui/toast';
 import { atualizarAluno, cadastrarAluno } from '@/lib/api';
-import { dicaRm, limparRm, MENSAGEM_RM, rmValido } from '@/lib/aluno';
+import {
+  dicaRm,
+  DOMINIO_EMAIL_ALUNO,
+  inicioEmailEsperado,
+  inicioEmailValido,
+  limparInicioEmail,
+  limparRm,
+  MENSAGEM_INICIO_EMAIL,
+  MENSAGEM_RM,
+  MENSAGEM_SOBRENOME,
+  rmValido,
+  separarEmailAluno,
+  temSobrenome,
+} from '@/lib/aluno';
 import { avisar, ALUNOS_ALTERADOS } from '@/lib/eventos';
 import { CURSOS, SEM_TURMA, STATUS_ALUNO, TURMAS } from '../alunos-textos';
+
+const AVISO_AMARELO =
+  'rounded-md bg-yellow-500/15 px-2.5 py-1.5 text-sm text-yellow-700 dark:text-yellow-400';
 
 // Janela de cadastrar (sem "aluno") ou editar (com "aluno") um aluno.
 // Mesmo modelo das janelas da tela de Administradores.
@@ -30,7 +52,10 @@ export default function AlunoDialog({ aluno }) {
   const [aberta, setAberta] = useState(false);
   const [rm, setRm] = useState('');
   const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
+  // Só a parte antes do @: o final do email é sempre o domínio institucional.
+  const [inicioEmail, setInicioEmail] = useState('');
+  // Edição de aluno antigo cujo email não é institucional: o email de antes.
+  const [emailAntigo, setEmailAntigo] = useState(null);
   const [curso, setCurso] = useState(null);
   const [turma, setTurma] = useState(SEM_TURMA);
   const [status, setStatus] = useState('ATIVO');
@@ -42,13 +67,42 @@ export default function AlunoDialog({ aluno }) {
     if (abrir) {
       setRm(aluno ? String(aluno.rm_aluno) : '');
       setNome(aluno?.nome_completo ?? '');
-      setEmail(aluno?.email ?? '');
+      if (aluno) {
+        // Email de outro domínio: já sugere o do padrão e avisa a troca.
+        const salvo = separarEmailAluno(aluno.email);
+        setInicioEmail(
+          salvo.institucional
+            ? salvo.inicio
+            : inicioEmailEsperado(aluno.nome_completo, aluno.rm_aluno),
+        );
+        setEmailAntigo(salvo.institucional ? null : aluno.email);
+      } else {
+        setInicioEmail('');
+        setEmailAntigo(null);
+      }
       setCurso(aluno?.curso ?? null);
       setTurma(aluno?.turma ?? SEM_TURMA);
       setStatus(aluno?.status ?? 'ATIVO');
       setErro('');
     }
     setAberta(abrir);
+  }
+
+  // No cadastro, o email acompanha o nome e o RM enquanto a pessoa não mudar o
+  // email à mão (ou se ela apagar o email). Na edição, o email não muda sozinho.
+  function emailSegue() {
+    return !editando && (inicioEmail === '' || inicioEmail === inicioEmailEsperado(nome, rm));
+  }
+
+  function mudarNome(novoNome) {
+    if (emailSegue()) setInicioEmail(inicioEmailEsperado(novoNome, rm));
+    setNome(novoNome);
+  }
+
+  function mudarRm(texto) {
+    const novoRm = limparRm(texto);
+    if (emailSegue()) setInicioEmail(inicioEmailEsperado(nome, novoRm));
+    setRm(novoRm);
   }
 
   async function handleSubmit(event) {
@@ -60,6 +114,19 @@ export default function AlunoDialog({ aluno }) {
       setErro(MENSAGEM_RM);
       return;
     }
+    // Sobrenome: obrigatório para alunos novos (os antigos seguem editáveis).
+    if (!editando && !temSobrenome(nome)) {
+      setErro(MENSAGEM_SOBRENOME);
+      return;
+    }
+    if (!inicioEmail) {
+      setErro('Preencha o email (a parte antes do @).');
+      return;
+    }
+    if (!inicioEmailValido(inicioEmail)) {
+      setErro(MENSAGEM_INICIO_EMAIL);
+      return;
+    }
     if (!curso) {
       setErro('Selecione o curso.');
       return;
@@ -67,7 +134,7 @@ export default function AlunoDialog({ aluno }) {
 
     const dados = {
       nome: nome.trim(),
-      email: email.trim().toLowerCase(),
+      email: `${inicioEmail}@${DOMINIO_EMAIL_ALUNO}`,
       curso,
       turma: turma === SEM_TURMA ? null : turma,
       status,
@@ -94,6 +161,12 @@ export default function AlunoDialog({ aluno }) {
   }
 
   const dica = editando ? null : dicaRm(rm);
+  const inicioEsperado = inicioEmailEsperado(nome, editando ? aluno.rm_aluno : rm);
+  const foraDoPadrao = Boolean(inicioEsperado && inicioEmail && inicioEmail !== inicioEsperado);
+  const faltaSobrenome = !editando && nome.trim() !== '' && !temSobrenome(nome);
+  const dicasEmail = ['aluno-email-dominio'];
+  if (emailAntigo) dicasEmail.push('aluno-email-antigo');
+  if (foraDoPadrao) dicasEmail.push('aluno-email-padrao');
 
   return (
     <Dialog open={aberta} onOpenChange={abrirOuFechar}>
@@ -109,7 +182,7 @@ export default function AlunoDialog({ aluno }) {
           Adicionar Aluno
         </DialogTrigger>
       )}
-      <DialogContent>
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{editando ? 'Editar Aluno' : 'Adicionar Aluno'}</DialogTitle>
           <DialogDescription>
@@ -132,7 +205,7 @@ export default function AlunoDialog({ aluno }) {
                 required
                 disabled={editando}
                 value={rm}
-                onChange={(e) => setRm(limparRm(e.target.value))}
+                onChange={(e) => mudarRm(e.target.value)}
                 aria-invalid={dica?.erro || undefined}
                 aria-describedby={editando ? undefined : 'aluno-rm-dica'}
               />
@@ -154,21 +227,55 @@ export default function AlunoDialog({ aluno }) {
                 required
                 maxLength={80}
                 value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                onChange={(e) => mudarNome(e.target.value)}
+                aria-describedby={faltaSobrenome ? 'aluno-nome-dica' : undefined}
               />
+              {faltaSobrenome && (
+                <FieldDescription id="aluno-nome-dica">
+                  Digite também o sobrenome: o email é montado com ele.
+                </FieldDescription>
+              )}
             </Field>
             <Field>
               <Label htmlFor="aluno-email">
                 Email<span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="aluno-email"
-                type="email"
-                required
-                maxLength={254}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              {/* flex-wrap: em tela estreita, o final do email desce para a linha de baixo */}
+              <InputGroup className="h-auto min-h-8 flex-wrap">
+                <InputGroupInput
+                  id="aluno-email"
+                  className="min-w-36"
+                  autoComplete="off"
+                  spellCheck={false}
+                  required
+                  value={inicioEmail}
+                  onChange={(e) => setInicioEmail(limparInicioEmail(e.target.value))}
+                  aria-describedby={dicasEmail.join(' ')}
+                />
+                <InputGroupAddon align="inline-end" className="pl-2.5">
+                  <InputGroupText id="aluno-email-dominio">@{DOMINIO_EMAIL_ALUNO}</InputGroupText>
+                </InputGroupAddon>
+              </InputGroup>
+              {!editando && !foraDoPadrao && (
+                <FieldDescription>
+                  Montado sozinho com o nome e o RM. Dá para mudar a parte antes do @.
+                </FieldDescription>
+              )}
+              {foraDoPadrao && (
+                <p id="aluno-email-padrao" className={AVISO_AMARELO}>
+                  Fora do padrão. O esperado é{' '}
+                  <strong className="font-medium break-all">
+                    {inicioEsperado}@{DOMINIO_EMAIL_ALUNO}
+                  </strong>
+                  . Dá para salvar assim mesmo.
+                </p>
+              )}
+              {emailAntigo && (
+                <p id="aluno-email-antigo" className={AVISO_AMARELO}>
+                  O email atual, <strong className="font-medium break-all">{emailAntigo}</strong>,
+                  não é institucional. Ao salvar, ele será trocado pelo email acima.
+                </p>
+              )}
             </Field>
             <div className="grid grid-cols-3 gap-3">
               <CampoSelect
