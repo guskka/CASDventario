@@ -2,6 +2,7 @@ import Header from '@/components/ui/header';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import AlunoDialog from './components/aluno-dialog';
+import ImportarAlunosDialog from './components/importar-alunos-dialog';
 import AlunosSection from './components/alunos-section';
 
 // Página de Alunos (item 8 do PLAN.md), no mesmo modelo da página de Administradores.
@@ -21,7 +22,10 @@ export default function AlunosPage() {
                     Cadastre e acompanhe os alunos atendidos pela ONG.
                   </p>
                 </div>
-                <AlunoDialog />
+                <div className="flex flex-wrap gap-2">
+                  <ImportarAlunosDialog />
+                  <AlunoDialog />
+                </div>
               </div>
               <AlunosSection />
             </div>

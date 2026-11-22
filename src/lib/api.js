@@ -203,6 +203,22 @@ export function deletarAluno(rm) {
   return request(`/alunos/${rm}`, { method: "DELETE" });
 }
 
+// Importação por planilha. linhas = [{ linha, rm, nome, email, curso, turma }].
+// A prévia só confere; importar cadastra os novos sem problema.
+export function previaImportacaoAlunos(linhas) {
+  return request("/alunos/importar/previa", {
+    method: "POST",
+    body: JSON.stringify({ linhas }),
+  });
+}
+
+export function importarAlunos(linhas) {
+  return request("/alunos/importar", {
+    method: "POST",
+    body: JSON.stringify({ linhas }),
+  });
+}
+
 // Empréstimos de um aluno (todos; os em aberto têm situacao diferente de DEVOLVIDO).
 export function emprestimosDoAluno(rm) {
   return request(`/emprestimos?alunoRm=${encodeURIComponent(rm)}`);
