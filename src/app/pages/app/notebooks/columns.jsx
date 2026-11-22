@@ -11,9 +11,11 @@ import { VARIANTE_STATUS, descreverVideo, rotuloStatus } from './notebooks-texto
 const columnHelper = createColumnHelper();
 
 const notebooksColumns = columnHelper.columns([
+  // Larguras fixas só nas colunas curtas: o resto do espaço fica para Modelo,
+  // Processador, Vídeo e Sistema (em tela estreita, eles cortam com "...").
   columnHelper.accessor('id_notebook', {
     header: 'Nº',
-    meta: { className: 'w-16' },
+    meta: { className: 'w-14' },
   }),
 
   // A busca procura aqui: modelo + processador + vídeo + sistema + nº.
@@ -50,12 +52,11 @@ const notebooksColumns = columnHelper.columns([
 
   columnHelper.accessor('sistema_operacional', {
     header: 'Sistema',
-    meta: { className: 'w-36' },
   }),
 
   columnHelper.accessor('status', {
     header: 'Status',
-    meta: { className: 'w-52' },
+    meta: { className: 'w-48' },
     cell: ({ getValue }) => (
       <Badge variant={VARIANTE_STATUS[getValue()]}>{rotuloStatus(getValue())}</Badge>
     ),
@@ -63,7 +64,7 @@ const notebooksColumns = columnHelper.columns([
 
   columnHelper.display({
     id: 'acoes',
-    meta: { className: 'w-24' },
+    meta: { className: 'w-20' },
     cell: ({ row }) => (
       <div className="flex">
         <NotebookDialog notebook={row.original} />

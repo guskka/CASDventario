@@ -118,9 +118,11 @@ export function DataTable({
                 {headerGroup.headers.map((header) => {
                   const customClass =
                     header.column.columnDef.meta?.className || '';
+                  // truncate: título que não cabe é cortado com "..." (e a
+                  // dica mostra o nome inteiro), em vez de invadir a coluna vizinha.
                   return (
                     <TableHead
-                      className={`font-bold select-none ${customClass}`}
+                      className={`font-bold select-none truncate ${customClass}`}
                       key={header.id}
                     >
                       {header.isPlaceholder ? null : (
